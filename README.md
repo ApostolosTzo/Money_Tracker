@@ -122,42 +122,51 @@ purple icon and runs offline after the first load.
 
 Live URL: **https://money-tracker-77g.pages.dev**
 
-This is a Cloudflare **Pages** project, so it lives on `*.pages.dev`. Static
-assets only, no Worker code. `wrangler.jsonc` pins the project name and
-compatibility date only.
+Cloudflare **Pages** project, static assets only, no Worker code and no Pages
+Functions. Cloudflare builds the project for you, so no local Node upgrade and
+no API token are needed.
 
-### The one setting that must be right
+### Build settings (the two that matter)
 
-**Build & deployments → Build output directory must be `dist`.**
+Workers & Pages → **money-tracker-77g** → Settings → **Builds & deployments**
 
-Not the repository root, and not blank. If it points at the repo root, Pages
-serves the source `index.html`, which references `/src/main.tsx`. The browser
-then tries to run uncompiled TypeScript, the module fails to load, and you get
-a blank white page even though every build succeeded. Verify by opening
-`https://money-tracker-77g.pages.dev/src/main.tsx` — if you get TypeScript
-source instead of a 404, the output directory is wrong.
+| Setting | Value |
+| --- | --- |
+| Framework preset | `None` (or `Vite`) |
+| Build command | `npm run build` |
+| Build output directory | `dist` |
 
-Do not put `pages_build_output_dir` in `wrangler.jsonc` to work around it.
-Declaring it alongside a dashboard output directory fails the build with
-"No deployment available". The dashboard owns this setting.
+**The build command is the setting that has been wrong all along.** If it is
+empty, Cloudflare logs `No build command specified. Skipping build step.`,
+never runs the build, and `dist` never exists, so the deploy fails with
+`build output directory not found`. With the output directory left at the repo
+root instead, it silently publishes the raw source `index.html`, which
+references `/src/main.tsx` — the browser then fails to load the module and you
+get a blank white page despite every build "succeeding".
 
-### Build settings
+Quick check once deployed: open `https://money-tracker-77g.pages.dev/src/main.tsx`.
+You want a **404**. If you get TypeScript source, the output directory is still
+pointing at the repo root.
 
-Cloudflare builds the project for you, so no local Node upgrade or API token is
-needed.
+### Do not add a wrangler config file
 
-1. Cloudflare dashboard → **Workers & Pages** → **money-tracker-77g** →
-   **Settings** → **Builds & deployments**
-2. Set:
-   - Framework preset: **Vite**
-   - Build command: `npm run build`
-   - Build output directory: `dist`
-3. Save, then **Retry deployment** on the failed commit
+There is deliberately **no `wrangler.jsonc` / `wrangler.toml`** in this repo.
 
-`.node-version` pins the build to Node 22. Pages falls back to `index.html`
-for unmatched paths automatically (it only serves a 404 page if a `404.html`
-exists, and this project has none), so deep links and the service worker's
-navigation requests resolve correctly.
+Cloudflare's build system checks for one first. If it finds a wrangler file it
+treats that as the source of truth and stops reading the dashboard, which is
+where a Pages Git build actually gets its build command from. A wrangler file
+containing only `name` and `compatibility_date` is rejected as invalid
+(`make sure the file is valid and contains the pages_build_output_dir
+property`), the whole config is skipped, and the build is skipped with it.
+
+So with a wrangler file present you must also declare
+`pages_build_output_dir`, and you inherit a second source of truth. Without one,
+the dashboard owns everything and there is exactly one place to get it right.
+
+`.node-version` pins the build to Node 22. Pages falls back to `index.html` for
+unmatched paths automatically (it only serves a 404 page if a `404.html` exists,
+and this project has none), so deep links and the service worker's navigation
+requests resolve correctly.
 
 Every push to `main` redeploys. Each deploy gets its own preview URL.
 
