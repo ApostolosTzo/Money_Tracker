@@ -48,19 +48,8 @@ const GLYPHS: Record<string, Glyph> = {
     ),
   },
 
-  // Shop front, used for the kiosk/newsstand.
-  kiosk: {
-    defaultEmoji: '🏪',
-    path: (
-      <>
-        <path d="M3.9 9.6 5.6 4.9h12.8l1.7 4.7Z" />
-        <path
-          fillRule="evenodd"
-          d="M4.6 10.7h14.8v8.8h-5.5v-5.1a1.9 1.9 0 0 0-3.8 0v5.1H4.6Z"
-        />
-      </>
-    ),
-  },
+  // Kiosk deliberately has no vector glyph: the 🏪 emoji is what belongs
+  // there, so it renders as the emoji on the coloured square.
 
   fuel: {
     defaultEmoji: '⛽',

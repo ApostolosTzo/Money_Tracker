@@ -4,6 +4,7 @@ import {
   DEFAULT_MOODS,
   OTHER_CATEGORY,
 } from '../data/defaults';
+import { resolveIconUpdate } from './iconUpdates';
 
 const STORAGE_KEY = 'money-tracker:v1';
 export const DATA_VERSION = 1;
@@ -35,16 +36,20 @@ export function migrate(raw: unknown): AppData {
   const categories: Category[] = Array.isArray(data.categories)
     ? data.categories
         .filter((c): c is Category => !!c && typeof c.id === 'string')
-        .map((c) => ({
-          id: c.id,
-          name: String(c.name ?? 'Untitled'),
-          icon: String(c.icon ?? '•'),
-          color: /^#[0-9a-f]{6}$/i.test(c.color ?? '') ? c.color : '#6D28D9',
-          presets: Array.isArray(c.presets)
-            ? c.presets.map((n) => Math.round(Number(n) * 100) / 100).filter((n) => n > 0)
-            : [],
-          slider: !!c.slider,
-        }))
+        .map((c) => {
+          const storedIcon = String(c.icon ?? '•');
+          return {
+            id: c.id,
+            name: String(c.name ?? 'Untitled'),
+            // Catch up built-in categories whose default icon has since changed.
+            icon: resolveIconUpdate(c.id, storedIcon) ?? storedIcon,
+            color: /^#[0-9a-f]{6}$/i.test(c.color ?? '') ? c.color : '#6D28D9',
+            presets: Array.isArray(c.presets)
+              ? c.presets.map((n) => Math.round(Number(n) * 100) / 100).filter((n) => n > 0)
+              : [],
+            slider: !!c.slider,
+          };
+        })
     : base.categories;
 
   const entries: Entry[] = Array.isArray(data.entries)
