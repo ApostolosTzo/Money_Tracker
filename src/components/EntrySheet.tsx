@@ -133,7 +133,6 @@ export function EntrySheet({ open, onClose, entry, category, initialDate }: Prop
           inputMode="decimal"
           placeholder="0.00"
           value={amount}
-          data-autofocus
           onChange={(e) => setAmount(e.target.value)}
           aria-label="Amount in euros"
         />

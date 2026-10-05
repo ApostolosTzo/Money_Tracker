@@ -101,9 +101,6 @@ function QuickTile({
     >
       <span className="tile-icon">{category.icon}</span>
       <span className="tile-name">{category.name}</span>
-      {category.presets.length > 0 ? (
-        <span className="tile-preset">{category.presets[0].toFixed(2)}</span>
-      ) : null}
     </button>
   );
 }
