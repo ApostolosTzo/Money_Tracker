@@ -114,6 +114,40 @@ scripts/
 
 ## Installing on Android
 
-Serve the built `dist/` over HTTPS (GitHub Pages works), open it in Chrome,
-then **Add to Home screen**. It launches fullscreen with the purple icon and
-runs offline after the first load.
+Serve the built `dist/` over HTTPS (Cloudflare, GitHub Pages, anything), open
+it in Chrome, then **Add to Home screen**. It launches fullscreen with the
+purple icon and runs offline after the first load.
+
+## Deploying to Cloudflare Workers
+
+Static assets, no Worker code. `wrangler.jsonc` is committed:
+
+```jsonc
+{
+  "name": "money-tracker",
+  "compatibility_date": "2025-01-01",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "single-page-application"
+  }
+}
+```
+
+`not_found_handling: single-page-application` keeps deep links working instead
+of returning a 404.
+
+Build command `npm run build`, deploy command `npx wrangler deploy`. Having
+`wrangler.jsonc` in the repo also stops Wrangler from trying to auto-detect and
+reconfigure the framework on every deploy.
+
+Wrangler 4 needs Node 20+ to build and Node 22+ to run the CLI. Cloudflare's
+build environment provides Node 24, so the deploy works there; for local
+deploys use `npx wrangler deploy` with Node 22 or newer.
+
+### Why Vite 6
+
+Wrangler refuses to auto-configure a project on Vite 5 ("cannot be
+automatically configured. Please update the Vite version to at least 6.0.0").
+This project is on Vite 6, with `vite-plugin-pwa` 1.3, `@vitejs/plugin-react`
+5.2 and TypeScript 5.9. Vite 6 is the newest major that still runs on Node
+20.19, which is what local development uses here.
