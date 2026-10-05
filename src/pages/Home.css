@@ -32,9 +32,35 @@
   background: color-mix(in srgb, var(--tile-color) 12%, transparent);
 }
 
+/*
+ * iOS-style icon: a solid rounded-square in the category colour with the
+ * glyph knocked out in white, so every tile reads as one flat shape.
+ * The colour is set inline on .tile-icon from the category.
+ */
 .tile-icon {
-  font-size: 30px;
-  line-height: 1.1;
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 15px;
+  color: #fff;
+  /* Gentle top-light gradient, like a system app icon. */
+  background-image: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.22) 0%,
+    rgba(255, 255, 255, 0) 58%
+  );
+  box-shadow:
+    0 1px 2px rgba(28, 18, 48, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  transition: transform 0.12s ease;
+}
+
+/* Emoji fallback needs to fill the same box. */
+.tile-icon > span {
+  display: grid;
+  place-items: center;
+  line-height: 1;
 }
 
 .tile-name {
@@ -55,9 +81,11 @@
   color: var(--text-faint);
 }
 
-.tile-add .tile-icon {
-  font-size: 26px;
+.tile-icon-plus {
+  background: var(--purple-50);
   color: var(--purple-400);
+  border: 1.5px dashed var(--purple-300);
+  box-shadow: none;
 }
 
 /* Other button */

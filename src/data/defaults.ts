@@ -19,7 +19,8 @@ export const DEFAULT_CATEGORIES: Category[] = [
   {
     id: 'kiosk',
     name: 'Kiosk',
-    icon: '📰',
+    // Shop front: a kiosk is a small store, not a newsstand stand.
+    icon: '🏪',
     color: '#0EA5E9',
     presets: [0.5, 1, 2],
   },
@@ -41,7 +42,8 @@ export const DEFAULT_CATEGORIES: Category[] = [
   {
     id: 'iris',
     name: 'Iris',
-    icon: '🏪',
+    // Bank emoji.
+    icon: '🏦',
     color: '#EC4899',
     presets: [],
   },

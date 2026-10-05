@@ -2,6 +2,7 @@ import { useState } from 'react';
 import type { Category } from '../types';
 import { useStore } from '../store/store';
 import { useLongPress } from '../hooks/useLongPress';
+import { CategoryIcon, PlusGlyph } from '../components/CategoryIcon';
 import { SummaryCard } from '../components/SummaryCard';
 import { EntrySheet } from '../components/EntrySheet';
 import { MonthPicker } from '../components/MonthPicker';
@@ -38,7 +39,9 @@ export function HomePage() {
             className="tile tile-add"
             onClick={() => setEditingCategory(null)}
           >
-            <span className="tile-icon">＋</span>
+            <span className="tile-icon tile-icon-plus">
+              <PlusGlyph size={24} />
+            </span>
             <span className="tile-name">Add tile</span>
           </button>
         ) : null}
@@ -99,7 +102,9 @@ function QuickTile({
       }}
       {...handlers}
     >
-      <span className="tile-icon">{category.icon}</span>
+      <span className="tile-icon" style={{ background: category.color }}>
+        <CategoryIcon category={category} size={26} />
+      </span>
       <span className="tile-name">{category.name}</span>
     </button>
   );

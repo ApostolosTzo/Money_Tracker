@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import type { Category } from '../types';
 import { useStore } from '../store/store';
 import { EMOJI_CHOICES } from '../data/defaults';
+import { CategoryIcon } from './CategoryIcon';
 import { formatMoney, parseAmount, uid } from '../lib/utils';
 import { Sheet } from './Sheet';
 import './CategoryEditor.css';
@@ -95,8 +96,12 @@ export function CategoryEditor({ open, onClose, category }: Props) {
       className="cat-sheet"
     >
       <div className="cat-preview" style={{ borderColor: color }}>
-        <span className="cat-preview-icon" style={{ background: `${color}1A` }}>
-          {icon}
+        <span className="cat-preview-icon" style={{ background: color }}>
+          <CategoryIcon
+            category={{ id: category?.id ?? 'new', icon }}
+            size={28}
+            className="cat-preview-glyph"
+          />
         </span>
         <span className="cat-preview-name" style={{ color }}>
           {name || 'Name'}
