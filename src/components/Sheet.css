@@ -1,0 +1,95 @@
+.sheet-root {
+  position: absolute;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.sheet-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(28, 18, 48, 0.45);
+  backdrop-filter: blur(2px);
+  animation: sheet-fade 0.18s ease;
+}
+
+.sheet-panel {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  max-height: 92%;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--surface);
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  box-shadow: var(--shadow-lg);
+  padding: 10px 18px calc(22px + var(--safe-b));
+  animation: sheet-rise 0.24s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.sheet-panel.full {
+  height: 92%;
+  display: flex;
+  flex-direction: column;
+}
+
+.sheet-panel.full > .sheet-body {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+}
+
+.sheet-grip {
+  width: 42px;
+  height: 4px;
+  border-radius: 999px;
+  background: var(--border-strong);
+  margin: 2px auto 12px;
+}
+
+.sheet-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 16px;
+  text-align: center;
+  letter-spacing: -0.01em;
+}
+
+.sheet-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.sheet-actions .btn {
+  flex: 1;
+  padding: 15px;
+  font-size: 16px;
+}
+
+@keyframes sheet-rise {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes sheet-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sheet-panel,
+  .sheet-backdrop {
+    animation: none;
+  }
+}

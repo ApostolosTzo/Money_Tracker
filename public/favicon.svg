@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Money Tracker">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#8B5CF6" />
+      <stop offset="1" stop-color="#5B21B6" />
+    </linearGradient>
+    <linearGradient id="sheen" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity=".28" />
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0" />
+    </linearGradient>
+  </defs>
+
+  <rect width="512" height="512" rx="112" fill="url(#bg)" />
+  <rect width="512" height="512" rx="112" fill="url(#sheen)" />
+
+  <!-- wallet body -->
+  <rect x="96" y="150" width="320" height="230" rx="40" fill="#FFFFFF" />
+
+  <!-- card slot line -->
+  <rect x="140" y="196" width="150" height="20" rx="10" fill="#DDD6FE" />
+
+  <!-- euro mark -->
+  <g stroke="#7C3AED" stroke-width="26" stroke-linecap="round" fill="none">
+    <path d="M214 258 L158 258" />
+    <path d="M214 302 L158 302" />
+    <path d="M266 236 C246 226 214 232 204 256 C194 280 210 314 240 316 C254 317 264 312 270 304" />
+  </g>
+
+  <!-- smiley reaction dot -->
+  <circle cx="378" cy="146" r="52" fill="#FDE68A" />
+  <circle cx="360" cy="136" r="6.5" fill="#78350F" />
+  <circle cx="396" cy="136" r="6.5" fill="#78350F" />
+  <path d="M352 162 C364 174 392 174 404 162" stroke="#78350F" stroke-width="7" stroke-linecap="round" fill="none" />
+</svg>

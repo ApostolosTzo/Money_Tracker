@@ -1,0 +1,169 @@
+.settings-title {
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin: 4px 4px 0;
+}
+
+.settings-card {
+  overflow: hidden;
+}
+
+.settings-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 15px;
+  border-bottom: 1px solid var(--border);
+}
+
+.settings-row:last-child {
+  border-bottom: none;
+}
+
+.settings-row-label {
+  flex: 1;
+  font-size: 14.5px;
+  font-weight: 600;
+}
+
+.settings-row-value {
+  font-size: 14.5px;
+  font-weight: 800;
+  color: var(--purple-700);
+  font-variant-numeric: tabular-nums;
+}
+
+.settings-row-action {
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: var(--purple-50);
+  border: 1px solid var(--purple-200);
+  color: var(--purple-700);
+  font-size: 12.5px;
+  font-weight: 700;
+}
+
+.settings-select {
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--border);
+  background: var(--surface-alt);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.settings-link {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 15px;
+  background: var(--surface);
+  text-align: left;
+}
+
+.settings-link-inner {
+  border-bottom: 1px solid var(--border);
+}
+
+.settings-link-inner:last-child {
+  border-bottom: none;
+}
+
+.settings-link span:first-child {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.settings-link strong {
+  font-size: 14.5px;
+  font-weight: 700;
+}
+
+.settings-link small {
+  font-size: 12px;
+  color: var(--text-faint);
+  line-height: 1.35;
+}
+
+.settings-link.danger strong {
+  color: var(--danger);
+}
+
+.settings-arrow {
+  font-size: 20px;
+  color: var(--text-faint);
+  flex: none;
+}
+
+.settings-tile-row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 15px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+
+.settings-tile-row:last-child {
+  border-bottom: none;
+}
+
+.settings-tile-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 11px;
+  display: grid;
+  place-items: center;
+  font-size: 19px;
+  border: 1.5px solid transparent;
+  flex: none;
+}
+
+.settings-tile-add .settings-tile-icon {
+  background: var(--purple-50);
+  border-color: var(--purple-200);
+  color: var(--purple-600);
+}
+
+.settings-tile-copy {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.settings-tile-copy strong {
+  font-size: 14.5px;
+  font-weight: 700;
+}
+
+.settings-tile-copy small {
+  font-size: 11.5px;
+  color: var(--text-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.summary-choice {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.summary-choice .btn {
+  padding: 15px;
+}
+
+.settings-footnote {
+  margin: 20px 6px 8px;
+  font-size: 12px;
+  color: var(--text-faint);
+  line-height: 1.5;
+  text-align: center;
+}

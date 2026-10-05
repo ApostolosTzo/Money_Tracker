@@ -1,0 +1,33 @@
+import { createContext, useContext } from 'react';
+import type { AppData, Category, Entry, MoodRule, PageId, Settings } from '../types';
+
+export interface AppStore extends AppData {
+  dispatch: (action: Action) => void;
+  page: PageId;
+  setPage: (page: PageId) => void;
+  /** Horizontal swipe navigation, direction -1 or +1. */
+  swipeTo: (direction: 1 | -1) => void;
+  /** Currently viewed month key, `YYYY-MM`. */
+  month: string;
+  setMonth: (key: string) => void;
+}
+
+export type Action =
+  | { type: 'addEntry'; entry: Entry }
+  | { type: 'updateEntry'; id: string; patch: Partial<Entry> }
+  | { type: 'deleteEntry'; id: string }
+  | { type: 'cancelEntry'; id: string; cancelled: boolean }
+  | { type: 'updateCategory'; id: string; patch: Partial<Category> }
+  | { type: 'addCategory'; category: Category }
+  | { type: 'deleteCategory'; id: string }
+  | { type: 'updateSettings'; patch: Partial<Settings> }
+  | { type: 'setMoods'; moods: MoodRule[] }
+  | { type: 'replaceAll'; data: AppData };
+
+export const StoreContext = createContext<AppStore | null>(null);
+
+export function useStore(): AppStore {
+  const ctx = useContext(StoreContext);
+  if (!ctx) throw new Error('useStore must be used inside <StoreProvider>');
+  return ctx;
+}
