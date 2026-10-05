@@ -118,31 +118,54 @@ Serve the built `dist/` over HTTPS (Cloudflare, GitHub Pages, anything), open
 it in Chrome, then **Add to Home screen**. It launches fullscreen with the
 purple icon and runs offline after the first load.
 
-## Deploying to Cloudflare Workers
+## Deploying to Cloudflare Pages
 
-Static assets, no Worker code. `wrangler.jsonc` is committed:
+This is a Cloudflare **Pages** project, so it lives on `*.pages.dev`. Static
+assets only, no Worker code. `wrangler.jsonc` is committed and declares the
+output directory:
 
 ```jsonc
 {
   "name": "money-tracker",
   "compatibility_date": "2025-01-01",
-  "assets": {
-    "directory": "./dist",
-    "not_found_handling": "single-page-application"
-  }
+  "pages_build_output_dir": "./dist"
 }
 ```
 
-`not_found_handling: single-page-application` keeps deep links working instead
-of returning a 404.
+Note this is `pages_build_output_dir`, not the `assets.directory` key a
+Workers static-assets deployment would use. The two are different products and
+resolve to different domains: `assets` deploys to `*.workers.dev`.
 
-Build command `npm run build`, deploy command `npx wrangler deploy`. Having
-`wrangler.jsonc` in the repo also stops Wrangler from trying to auto-detect and
-reconfigure the framework on every deploy.
+### Deploy through the dashboard
 
-Wrangler 4 needs Node 20+ to build and Node 22+ to run the CLI. Cloudflare's
-build environment provides Node 24, so the deploy works there; for local
-deploys use `npx wrangler deploy` with Node 22 or newer.
+Cloudflare builds the project for you, so no local Node upgrade or API token
+is needed.
+
+1. Cloudflare dashboard → **Workers & Pages** → **Create** → **Pages** →
+   **Connect to Git**
+2. Pick the `Money_Tracker` repository
+3. Fill in the build settings:
+   - Framework preset: **Vite**
+   - Build command: `npm run build`
+   - Build output directory: `dist`
+4. **Save and Deploy**
+
+`.node-version` pins the build to Node 22, so the build is reproducible. Pages
+falls back to `index.html` for unmatched paths automatically (it only serves a
+404 page if a `404.html` exists, and this project has none), so deep links and
+the service worker's navigation requests resolve correctly.
+
+Every push to the main branch redeploys. Each deploy gets its own preview URL.
+
+### Deploy from the CLI instead
+
+```powershell
+npx wrangler login
+npx wrangler pages deploy dist
+```
+
+Wrangler 4 needs Node 22+ to run, so upgrade local Node first if you use this
+route.
 
 ### Why Vite 6
 
