@@ -120,48 +120,52 @@ purple icon and runs offline after the first load.
 
 ## Deploying to Cloudflare Pages
 
+Live URL: **https://money-tracker-77g.pages.dev**
+
 This is a Cloudflare **Pages** project, so it lives on `*.pages.dev`. Static
-assets only, no Worker code. `wrangler.jsonc` is committed and declares the
-output directory:
+assets only, no Worker code. `wrangler.jsonc` pins the project name and
+compatibility date only.
 
-```jsonc
-{
-  "name": "money-tracker",
-  "compatibility_date": "2025-01-01",
-  "pages_build_output_dir": "./dist"
-}
-```
+### The one setting that must be right
 
-Note this is `pages_build_output_dir`, not the `assets.directory` key a
-Workers static-assets deployment would use. The two are different products and
-resolve to different domains: `assets` deploys to `*.workers.dev`.
+**Build & deployments → Build output directory must be `dist`.**
 
-### Deploy through the dashboard
+Not the repository root, and not blank. If it points at the repo root, Pages
+serves the source `index.html`, which references `/src/main.tsx`. The browser
+then tries to run uncompiled TypeScript, the module fails to load, and you get
+a blank white page even though every build succeeded. Verify by opening
+`https://money-tracker-77g.pages.dev/src/main.tsx` — if you get TypeScript
+source instead of a 404, the output directory is wrong.
 
-Cloudflare builds the project for you, so no local Node upgrade or API token
-is needed.
+Do not put `pages_build_output_dir` in `wrangler.jsonc` to work around it.
+Declaring it alongside a dashboard output directory fails the build with
+"No deployment available". The dashboard owns this setting.
 
-1. Cloudflare dashboard → **Workers & Pages** → **Create** → **Pages** →
-   **Connect to Git**
-2. Pick the `Money_Tracker` repository
-3. Fill in the build settings:
+### Build settings
+
+Cloudflare builds the project for you, so no local Node upgrade or API token is
+needed.
+
+1. Cloudflare dashboard → **Workers & Pages** → **money-tracker-77g** →
+   **Settings** → **Builds & deployments**
+2. Set:
    - Framework preset: **Vite**
    - Build command: `npm run build`
    - Build output directory: `dist`
-4. **Save and Deploy**
+3. Save, then **Retry deployment** on the failed commit
 
-`.node-version` pins the build to Node 22, so the build is reproducible. Pages
-falls back to `index.html` for unmatched paths automatically (it only serves a
-404 page if a `404.html` exists, and this project has none), so deep links and
-the service worker's navigation requests resolve correctly.
+`.node-version` pins the build to Node 22. Pages falls back to `index.html`
+for unmatched paths automatically (it only serves a 404 page if a `404.html`
+exists, and this project has none), so deep links and the service worker's
+navigation requests resolve correctly.
 
-Every push to the main branch redeploys. Each deploy gets its own preview URL.
+Every push to `main` redeploys. Each deploy gets its own preview URL.
 
 ### Deploy from the CLI instead
 
 ```powershell
 npx wrangler login
-npx wrangler pages deploy dist
+npx wrangler pages deploy dist --project-name money-tracker-77g
 ```
 
 Wrangler 4 needs Node 22+ to run, so upgrade local Node first if you use this

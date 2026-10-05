@@ -1,6 +1,19 @@
 {
+  // Cloudflare Pages project settings live in the dashboard, not here:
+  //
+  //   Workers & Pages > money-tracker-77g > Settings > Builds & deployments
+  //     Build command:            npm run build
+  //     Build output directory:   dist
+  //
+  // Do NOT add `pages_build_output_dir` to this file. When the dashboard
+  // output directory is also configured, declaring it here makes the build
+  // fail outright (commit 3d9ad1b, "No deployment available").
+  //
+  // Do NOT use an `assets` key either. That is a Cloudflare *Workers*
+  // static-assets config and deploys to *.workers.dev, not *.pages.dev.
+  //
+  // This file exists only to pin the project name and compatibility date.
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "money-tracker",
-  "compatibility_date": "2025-01-01",
-  "pages_build_output_dir": "./dist"
+  "name": "money-tracker-77g",
+  "compatibility_date": "2025-01-01"
 }
