@@ -70,6 +70,7 @@ function reducer(state: AppData, action: Action): AppData {
 export function StoreProvider({ children }: { children: React.ReactNode }) {
   const [data, dispatch] = useReducer(reducer, undefined, loadData);
   const [page, setPageState] = useState<PageId>(data.settings.startPage);
+  const [direction, setDirection] = useState<1 | -1>(1);
   const [month, setMonth] = useState<string>(currentMonthKey);
 
   useEffect(() => {
@@ -82,20 +83,27 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     if (month > now) setMonth(now);
   }, [month]);
 
-  const setPage = useCallback((next: PageId) => setPageState(next), []);
+  const setPage = useCallback((next: PageId) => {
+    setPageState((prev) => {
+      if (prev === next) return prev;
+      setDirection(PAGE_ORDER.indexOf(next) >= PAGE_ORDER.indexOf(prev) ? 1 : -1);
+      return next;
+    });
+  }, []);
 
   /** Horizontal swipe: -1 goes back, +1 goes forward, clamped at the ends. */
-  const swipeTo = useCallback((direction: 1 | -1) => {
+  const swipeTo = useCallback((step: 1 | -1) => {
     setPageState((prev) => {
       const i = PAGE_ORDER.indexOf(prev);
-      const next = PAGE_ORDER[Math.min(PAGE_ORDER.length - 1, Math.max(0, i + direction))];
+      const next = PAGE_ORDER[Math.min(PAGE_ORDER.length - 1, Math.max(0, i + step))];
+      if (next !== prev) setDirection(step);
       return next;
     });
   }, []);
 
   const value = useMemo<AppStore>(
-    () => ({ ...data, dispatch, page, setPage, swipeTo, month, setMonth }),
-    [data, page, setPage, swipeTo, month],
+    () => ({ ...data, dispatch, page, setPage, swipeTo, direction, month, setMonth }),
+    [data, page, setPage, swipeTo, direction, month],
   );
 
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>;

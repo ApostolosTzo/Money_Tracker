@@ -7,6 +7,8 @@ export interface AppStore extends AppData {
   setPage: (page: PageId) => void;
   /** Horizontal swipe navigation, direction -1 or +1. */
   swipeTo: (direction: 1 | -1) => void;
+  /** Which way the last page change went, used to animate the transition. */
+  direction: 1 | -1;
   /** Currently viewed month key, `YYYY-MM`. */
   month: string;
   setMonth: (key: string) => void;
