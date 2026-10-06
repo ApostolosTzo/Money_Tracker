@@ -34,45 +34,43 @@ const MAX_OVERDRAG = 18;
 export function SwipeRow({ entry, onEdit, onCancel }: Props) {
   const { categories, settings } = useStore();
   const [offset, setOffset] = useState(0);
-  const [side, setSide] = useState<'none' | 'edit' | 'cancel'>('none');
 
-  const drag = useRef({ startX: 0, base: 0, moved: false, live: 0, active: false });
-  const sideRef = useRef(side);
-  sideRef.current = side;
+  const drag = useRef({ startX: 0, moved: false, active: false, fired: false });
 
   const category = resolveCategory(categories, entry.categoryId);
 
   const finish = useCallback(() => {
     if (!drag.current.active) return;
     drag.current.active = false;
-    const next = drag.current.live;
-    if (next >= THRESHOLD) {
-      setSide('edit');
-      setOffset(OPEN);
-    } else if (next <= -THRESHOLD) {
-      setSide('cancel');
-      setOffset(-OPEN);
-    } else {
-      setSide('none');
-      setOffset(0);
-    }
+    // The action already fired mid-drag; settle the row closed.
+    setOffset(0);
   }, []);
 
   const onPointerMove = useCallback((e: PointerEvent) => {
     if (!drag.current.active) return;
     const delta = e.clientX - drag.current.startX;
     if (Math.abs(delta) > 8) drag.current.moved = true;
-    const next = clamp(drag.current.base + delta, -OPEN - MAX_OVERDRAG, OPEN + MAX_OVERDRAG);
-    drag.current.live = next;
+    const next = clamp(delta, -OPEN - MAX_OVERDRAG, OPEN + MAX_OVERDRAG);
     setOffset(next);
-  }, []);
+
+    // Fire the moment the gesture is committed, so the action runs as soon as
+    // the row passes halfway rather than on release.
+    if (!drag.current.fired && next >= THRESHOLD) {
+      drag.current.fired = true;
+      setOffset(OPEN);
+      onEdit(entry);
+    } else if (!drag.current.fired && next <= -THRESHOLD) {
+      drag.current.fired = true;
+      setOffset(-OPEN);
+      onCancel(entry);
+    }
+  }, [entry, onEdit, onCancel]);
 
   useEffect(() => {
     const onUp = () => finish();
     const onCancelEvt = () => {
       drag.current.active = false;
-      drag.current.live = 0;
-      setSide('none');
+      drag.current.fired = false;
       setOffset(0);
     };
     window.addEventListener('pointermove', onPointerMove);
@@ -86,56 +84,24 @@ export function SwipeRow({ entry, onEdit, onCancel }: Props) {
   }, [finish, onPointerMove]);
 
   const onPointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
-    const base = sideRef.current === 'edit' ? OPEN : sideRef.current === 'cancel' ? -OPEN : 0;
-    drag.current = { startX: e.clientX, base, moved: false, live: base, active: true };
-    setOffset(base);
+    drag.current = { startX: e.clientX, moved: false, active: true, fired: false };
+    setOffset(0);
   }, []);
-
-  /** Tapping the revealed action commits it and closes the row. */
-  const commit = useCallback(
-    (which: 'edit' | 'cancel') => {
-      setSide('none');
-      setOffset(0);
-      if (which === 'edit') onEdit(entry);
-      else onCancel(entry);
-    },
-    [entry, onEdit, onCancel],
-  );
 
   const reveal = Math.min(1, Math.abs(offset) / OPEN);
 
   return (
-    <li className="swipe-item" data-side={side}>
-      <div className="swipe-actions" aria-hidden={side === 'none'}>
-        <div
-          className="swipe-action swipe-action-edit"
-          style={{ opacity: offset > 0 ? reveal : 0 }}
-          onClick={() => commit('edit')}
-          role="button"
-          tabIndex={side === 'edit' ? 0 : -1}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault();
-              commit('edit');
-            }
-          }}
-        >
+    <li className="swipe-item" data-action={drag.current.fired ? 'fired' : 'idle'}>
+      {/*
+        Purely visual feedback for the drag in progress. The action fires
+        during the gesture, so these are not tappable.
+      */}
+      <div className="swipe-actions" aria-hidden="true">
+        <div className="swipe-action swipe-action-edit" style={{ opacity: offset > 0 ? reveal : 0 }}>
           <span aria-hidden="true">✏️</span>
           Edit
         </div>
-        <div
-          className="swipe-action swipe-action-cancel"
-          style={{ opacity: offset < 0 ? reveal : 0 }}
-          onClick={() => commit('cancel')}
-          role="button"
-          tabIndex={side === 'cancel' ? 0 : -1}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault();
-              commit('cancel');
-            }
-          }}
-        >
+        <div className="swipe-action swipe-action-cancel" style={{ opacity: offset < 0 ? reveal : 0 }}>
           <span aria-hidden="true">{entry.cancelled ? '↩' : '⊘'}</span>
           {entry.cancelled ? 'Restore' : 'Cancel'}
         </div>
@@ -146,9 +112,9 @@ export function SwipeRow({ entry, onEdit, onCancel }: Props) {
         style={{ transform: `translateX(${offset}px)` }}
         onPointerDown={onPointerDown}
         onClick={() => {
-          // Ignore the click that ends a drag, and let a revealed action be tapped.
+          // A plain tap opens the entry; a drag already fired its action.
           if (drag.current.moved) return;
-          if (sideRef.current === 'none') onEdit(entry);
+          onEdit(entry);
         }}
       >
         <span className="swipe-accent" style={{ background: category.color }} aria-hidden="true" />

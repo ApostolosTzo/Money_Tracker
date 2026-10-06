@@ -9,12 +9,8 @@
   touch-action: pan-y;
 }
 
-.swipe-item[data-side='edit'] {
-  border-color: var(--purple-400);
-}
-
-.swipe-item[data-side='cancel'] {
-  border-color: var(--danger);
+.swipe-item[data-action='fired'] {
+  border-color: var(--border);
 }
 
 .swipe-actions {
@@ -35,13 +31,8 @@
   font-weight: 800;
   color: #fff;
   transition: opacity 0.15s ease;
-  /* Only the revealed side may be tapped. */
+  /* Visual feedback only; the action fires from the drag itself. */
   pointer-events: none;
-}
-
-.swipe-item[data-side='edit'] .swipe-action-edit,
-.swipe-item[data-side='cancel'] .swipe-action-cancel {
-  pointer-events: auto;
 }
 
 .swipe-action span {
