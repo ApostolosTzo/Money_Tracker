@@ -112,6 +112,11 @@
   background: var(--surface);
 }
 
+.swatch-row {
+  margin-top: 12px;
+  margin-bottom: 0;
+}
+
 .preset-edit-row {
   display: flex;
   flex-wrap: wrap;

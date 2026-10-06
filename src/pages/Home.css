@@ -6,7 +6,7 @@
 .tile-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 4px;
+  gap: 10px;
 }
 
 .tile {
@@ -17,7 +17,7 @@
   justify-content: center;
   gap: 6px;
   aspect-ratio: 1 / 1;
-  padding: 10px 4px;
+  padding: 14px 6px;
   border-radius: var(--radius-lg);
   /* No card: the icon and label sit straight on the page background. */
   background: transparent;
@@ -40,9 +40,9 @@
 .tile-icon {
   display: grid;
   place-items: center;
-  width: 52px;
-  height: 52px;
-  border-radius: 15px;
+  width: 66px;
+  height: 66px;
+  border-radius: 19px;
   color: #fff;
   /* Gentle top-light gradient, like a system app icon. */
   background-image: linear-gradient(

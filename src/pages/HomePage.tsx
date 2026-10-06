@@ -40,7 +40,7 @@ export function HomePage() {
             onClick={() => setEditingCategory(null)}
           >
             <span className="tile-icon tile-icon-plus">
-              <PlusGlyph size={24} />
+              <PlusGlyph size={30} />
             </span>
             <span className="tile-name">Add tile</span>
           </button>
@@ -103,7 +103,7 @@ function QuickTile({
       {...handlers}
     >
       <span className="tile-icon" style={{ background: category.color }}>
-        <CategoryIcon category={category} size={26} />
+        <CategoryIcon category={category} size={34} />
       </span>
       <span className="tile-name">{category.name}</span>
     </button>

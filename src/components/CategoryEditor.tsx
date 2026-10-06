@@ -3,6 +3,7 @@ import type { Category } from '../types';
 import { useStore } from '../store/store';
 import { EMOJI_CHOICES } from '../data/defaults';
 import { CategoryIcon } from './CategoryIcon';
+import { ColorPicker } from './ColorPicker';
 import { formatMoney, parseAmount, uid } from '../lib/utils';
 import { Sheet } from './Sheet';
 import './CategoryEditor.css';
@@ -161,6 +162,7 @@ export function CategoryEditor({ open, onClose, category }: Props) {
 
       <div className="field">
         <span className="field-label">Colour</span>
+        <ColorPicker color={color} onChange={setColor} />
         <div className="swatch-row">
           {SWATCHES.map((c) => (
             <button
@@ -172,15 +174,6 @@ export function CategoryEditor({ open, onClose, category }: Props) {
               aria-label={`Colour ${c}`}
             />
           ))}
-        </div>
-        <div className="swatch-row">
-          <input
-            type="color"
-            className="swatch-custom"
-            value={color}
-            aria-label="Custom colour"
-            onChange={(e) => setColor(e.target.value)}
-          />
         </div>
       </div>
 
