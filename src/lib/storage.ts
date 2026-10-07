@@ -2,6 +2,7 @@ import type { AppData, Category, Entry, MoodRule, PageId, Settings } from '../ty
 import {
   DEFAULT_CATEGORIES,
   DEFAULT_MOODS,
+  MAX_QUICK_TILES,
   OTHER_CATEGORY,
 } from '../data/defaults';
 import { resolveIconUpdate } from './iconUpdates';
@@ -25,6 +26,26 @@ export function defaultData(): AppData {
     categories: DEFAULT_CATEGORIES.map((c) => ({ ...c, presets: [...c.presets] })),
     settings: { ...DEFAULT_SETTINGS, moods: DEFAULT_MOODS.map((m) => ({ ...m })) },
   };
+}
+
+/**
+ * Appends built-in categories that are missing from a saved list.
+ *
+ * Adding a default only helps fresh installs unless this runs, which is the
+ * same trap as the icon migrations: a device that already has data would
+ * otherwise never see the new tile. Categories the user created or renamed are
+ * left alone, and an existing entry with a matching id keeps its customisation.
+ */
+function withMissingDefaults(categories: Category[]): Category[] {
+  const present = new Set(categories.map((c) => c.id));
+  const additions = DEFAULT_CATEGORIES.filter(
+    (c) => !present.has(c.id) && categories.length < MAX_QUICK_TILES,
+  );
+  if (additions.length === 0) return categories;
+  return [
+    ...categories,
+    ...additions.map((c) => ({ ...c, presets: [...c.presets] })),
+  ].slice(0, MAX_QUICK_TILES);
 }
 
 /** Repair anything missing or malformed so an old/partial file can still load. */
@@ -51,6 +72,8 @@ export function migrate(raw: unknown): AppData {
           };
         })
     : base.categories;
+
+  const categoriesWithDefaults = withMissingDefaults(categories);
 
   const entries: Entry[] = Array.isArray(data.entries)
     ? data.entries
@@ -87,7 +110,7 @@ export function migrate(raw: unknown): AppData {
   return {
     version: DATA_VERSION,
     entries,
-    categories,
+    categories: categoriesWithDefaults,
     settings: {
       showTabs: rawSettings.showTabs !== false,
       startPage,

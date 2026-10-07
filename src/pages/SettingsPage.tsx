@@ -6,6 +6,7 @@ import { currentMonthKey, formatMoney, monthLabel } from '../lib/utils';
 import { buildCsv, buildSummary } from '../lib/exportSummary';
 import { downloadText, pickTextFile, timestampedName } from '../lib/download';
 import { defaultData, migrate } from '../lib/storage';
+import { MAX_QUICK_TILES } from '../data/defaults';
 import { CategoryEditor } from '../components/CategoryEditor';
 import { MoodEditor } from '../components/MoodEditor';
 import { Sheet } from '../components/Sheet';
@@ -151,7 +152,7 @@ export function SettingsPage() {
             <span className="settings-arrow">›</span>
           </button>
         ))}
-        {categories.length < 9 ? (
+        {categories.length < MAX_QUICK_TILES ? (
           <button
             type="button"
             className="settings-tile-row settings-tile-add"
@@ -160,7 +161,10 @@ export function SettingsPage() {
             <span className="settings-tile-icon">＋</span>
             <span className="settings-tile-copy">
               <strong>Add tile</strong>
-              <small>{9 - categories.length} slot{9 - categories.length === 1 ? '' : 's'} left</small>
+              <small>
+                {MAX_QUICK_TILES - categories.length} slot
+                {MAX_QUICK_TILES - categories.length === 1 ? '' : 's'} left
+              </small>
             </span>
             <span className="settings-arrow">›</span>
           </button>

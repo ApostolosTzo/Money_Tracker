@@ -3,6 +3,7 @@ import type { Category } from '../types';
 import { useStore } from '../store/store';
 import { useLongPress } from '../hooks/useLongPress';
 import { CategoryIcon, PlusGlyph } from '../components/CategoryIcon';
+import { MAX_QUICK_TILES } from '../data/defaults';
 import { SummaryCard } from '../components/SummaryCard';
 import { EntrySheet } from '../components/EntrySheet';
 import { MonthPicker } from '../components/MonthPicker';
@@ -33,7 +34,7 @@ export function HomePage() {
           />
         ))}
 
-        {categories.length < 9 ? (
+        {categories.length < MAX_QUICK_TILES ? (
           <button
             type="button"
             className="tile tile-add"

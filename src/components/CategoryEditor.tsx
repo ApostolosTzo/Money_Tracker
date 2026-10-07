@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import type { Category } from '../types';
 import { useStore } from '../store/store';
-import { EMOJI_CHOICES } from '../data/defaults';
+import { EMOJI_CHOICES, MAX_QUICK_TILES } from '../data/defaults';
 import { CategoryIcon } from './CategoryIcon';
 import { ColorPicker } from './ColorPicker';
 import { formatMoney, parseAmount, uid } from '../lib/utils';
@@ -65,8 +65,8 @@ export function CategoryEditor({ open, onClose, category }: Props) {
         patch: { name: name.trim(), icon, color, presets, slider },
       });
     } else {
-      if (categories.length >= 9) {
-        alert('The home grid holds 9 tiles. Remove one first.');
+      if (categories.length >= MAX_QUICK_TILES) {
+        alert(`The home grid holds ${MAX_QUICK_TILES} tiles. Remove one first.`);
         return;
       }
       const fresh: Category = {

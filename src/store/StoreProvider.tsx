@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useReducer, useState } from 'react';
 import type { AppData, PageId } from '../types';
 import { currentMonthKey } from '../lib/utils';
 import { loadData, saveData } from '../lib/storage';
-import { OTHER_CATEGORY } from '../data/defaults';
+import { OTHER_CATEGORY, MAX_QUICK_TILES } from '../data/defaults';
 import type { Action, AppStore } from './store';
 import { StoreContext } from './store';
 
@@ -39,8 +39,8 @@ function reducer(state: AppData, action: Action): AppData {
       };
 
     case 'addCategory':
-      // The home grid is a 3x3 block, so cap it at 9.
-      if (state.categories.length >= 9) return state;
+      // The home grid is three across; the cap just bounds the row count.
+      if (state.categories.length >= MAX_QUICK_TILES) return state;
       return { ...state, categories: [...state.categories, action.category] };
 
     case 'deleteCategory':

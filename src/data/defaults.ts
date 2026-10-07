@@ -1,6 +1,12 @@
 import type { Category, MoodRule } from '../types';
 
-/** Default 9 quick tiles + the generic "Other" bucket. */
+/**
+ * Upper bound on quick tiles. The grid is three across, so this is a row
+ * count times three; raising it just adds rows.
+ */
+export const MAX_QUICK_TILES = 12;
+
+/** Default 10 quick tiles + the generic "Other" bucket. */
 export const DEFAULT_CATEGORIES: Category[] = [
   {
     id: 'coffee',
@@ -67,6 +73,13 @@ export const DEFAULT_CATEGORIES: Category[] = [
     icon: '🍺',
     color: '#A855F7',
     presets: [3, 5, 8],
+  },
+  {
+    id: 'oasa',
+    name: 'OASA',
+    icon: '🚇',
+    color: '#2563EB',
+    presets: [1.2],
   },
 ];
 
