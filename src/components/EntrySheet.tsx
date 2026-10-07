@@ -3,14 +3,19 @@ import type { Category, Entry } from '../types';
 import { useStore } from '../store/store';
 import { OTHER_CATEGORY } from '../data/defaults';
 import {
+  dayLabel,
   formatAmountInput,
   formatMoney,
+  monthKey,
+  monthLabel,
   nowTime,
   parseAmount,
   todayISO,
   uid,
 } from '../lib/utils';
 import { Sheet } from './Sheet';
+import { Switch } from './Switch';
+import { isSeriesActive } from '../lib/recurring';
 import './EntrySheet.css';
 
 const NOTE_MAX = 150;
@@ -38,6 +43,7 @@ export function EntrySheet({ open, onClose, entry, category, initialDate }: Prop
   const [categoryId, setCategoryId] = useState<string>(OTHER_CATEGORY.id);
   const [sliderBase, setSliderBase] = useState<number | null>(null);
   const [showAllPresets, setShowAllPresets] = useState(false);
+  const [repeat, setRepeat] = useState(false);
 
   const activeCategory = useMemo(
     () => categories.find((c) => c.id === categoryId) ?? OTHER_CATEGORY,
@@ -55,6 +61,7 @@ export function EntrySheet({ open, onClose, entry, category, initialDate }: Prop
       setTime(entry.time);
       setCategoryId(entry.categoryId ?? OTHER_CATEGORY.id);
       setSliderBase(entry.amount);
+      setRepeat(isSeriesActive(entry, monthKey(todayISO())));
     } else {
       const cat = category ?? OTHER_CATEGORY;
       setAmount(cat.presets[0] ? formatAmountInput(cat.presets[0]) : '');
@@ -64,6 +71,7 @@ export function EntrySheet({ open, onClose, entry, category, initialDate }: Prop
       setTime(nowTime());
       setCategoryId(cat.id);
       setSliderBase(null);
+      setRepeat(false);
     }
     setShowAllPresets(false);
   }, [open, entry, category, initialDate]);
@@ -94,23 +102,51 @@ export function EntrySheet({ open, onClose, entry, category, initialDate }: Prop
       date,
       time,
     };
+
     if (entry) {
-      dispatch({ type: 'updateEntry', id: entry.id, patch });
+      // Turning repeat off closes the series at this month rather than
+      // clearing the flag, so the months already paid for stay put.
+      const wasActive = isSeriesActive(entry, monthKey(todayISO()));
+      dispatch({
+        type: 'updateEntry',
+        id: entry.id,
+        patch: repeat
+          ? { ...patch, repeat: 'monthly', repeatUntil: null }
+          : {
+              ...patch,
+              repeat: null,
+              repeatUntil: wasActive ? monthKey(todayISO()) : entry.repeatUntil ?? null,
+            },
+      });
     } else {
       const fresh: Entry = {
         id: uid('e'),
         cancelled: false,
         createdAt: Date.now(),
         ...patch,
+        repeat: repeat ? 'monthly' : null,
+        skipMonths: [],
       };
       dispatch({ type: 'addEntry', entry: fresh });
     }
     onClose();
   }
 
+  function handleStopSeries() {
+    if (!entry) return;
+    if (!confirm('Stop repeating? Months already recorded are kept.')) return;
+    dispatch({ type: 'stopSeries', seriesId: entry.id, fromMonth: monthKey(todayISO()) });
+    onClose();
+  }
+
   function handleDelete() {
     if (!entry) return;
-    if (settings.confirmDelete && !confirm('Delete this entry permanently?')) return;
+    // A series owns every occurrence generated from it, so say so plainly.
+    const message =
+      entry.repeat === 'monthly'
+        ? 'Delete this entry and stop the whole repeating series? Every month generated from it goes too.'
+        : 'Delete this entry permanently?';
+    if (settings.confirmDelete && !confirm(message)) return;
     dispatch({ type: 'deleteEntry', id: entry.id });
     onClose();
   }
@@ -247,6 +283,24 @@ export function EntrySheet({ open, onClose, entry, category, initialDate }: Prop
         </span>
       </label>
 
+      {/* repeat */}
+      <div className="field">
+        <Switch
+          label="Repeat every month"
+          hint={
+            entry?.repeat === 'monthly'
+              ? isSeriesActive(entry, monthKey(todayISO()))
+                ? `Started ${dayLabel(entry.date, settings.locale)} · ${
+                    entry.skipMonths?.length ?? 0
+                  } month${entry.skipMonths?.length === 1 ? '' : 's'} skipped`
+                : `Stopped after ${monthLabel(entry.repeatUntil ?? entry.date)}`
+              : 'Adds this payment to every following month automatically.'
+          }
+          checked={repeat}
+          onChange={setRepeat}
+        />
+      </div>
+
       <div className="sheet-actions">
         {isEdit ? (
           <button type="button" className="btn btn-danger" onClick={handleDelete}>
@@ -270,6 +324,16 @@ export function EntrySheet({ open, onClose, entry, category, initialDate }: Prop
           {isEdit ? 'Save' : 'Add'}
         </button>
       </div>
+
+      {isEdit && entry?.repeat === 'monthly' && isSeriesActive(entry, monthKey(todayISO())) ? (
+        <button
+          type="button"
+          className="btn btn-ghost btn-block repeat-stop"
+          onClick={handleStopSeries}
+        >
+          Stop repeating
+        </button>
+      ) : null}
 
       {isEdit && entries.length > 0 ? (
         <p className="hint entry-hint">Added {new Date(entry!.createdAt).toLocaleString()}</p>

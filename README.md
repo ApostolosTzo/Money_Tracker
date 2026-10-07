@@ -75,6 +75,26 @@ Tapping a tile opens the amount sheet:
 - The Fuel slider anchors to whichever preset you tapped and runs 50€ above it:
   tap 20.00 and it slides from 20 to 70. Tap 50.00 and it runs 50 to 100.
 
+### Repeating payments
+
+Tick **Repeat every month** on any entry to add it to every following month
+automatically. Subscriptions, rent, a phone bill, the gym — anything that
+lands the same each month.
+
+- **Forward only.** Adding it in October never invents earlier months.
+- Occurrences are generated on display rather than written to storage, so
+  changing the amount updates every future month and nothing needs cleaning up.
+- The day of month is preserved and clamped: a payment on the 31st lands on
+  the 30th, or the 28th/29th in February.
+- Generated rows are marked `↻ monthly`. Tapping one opens the entry that
+  started the series, so you always edit the original.
+- **Skipping** one month: swipe a generated row left and tap Skip. Only that
+  month is dropped; the rest of the series continues.
+- **Stopping**: open the series and use Stop repeating. Months already paid
+  for stay in your totals, nothing new is added.
+- Deleting a series entry deletes every month generated from it, so the
+  confirmation says so.
+
 ## Exports
 
 **JSON backup** holds entries, tiles, reaction rules and settings. Import

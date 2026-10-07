@@ -147,3 +147,9 @@
 .swipe-body.is-cancelled .swipe-accent {
   opacity: 0.4;
 }
+
+/* Marks a row generated from a repeating series. */
+.swipe-repeat {
+  color: var(--text-faint);
+  font-weight: 700;
+}

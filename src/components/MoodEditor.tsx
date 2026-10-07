@@ -18,7 +18,7 @@ interface Props {
  * happy up to €50 this month, and change it to €100 next month.
  */
 export function MoodEditor({ open, onClose }: Props) {
-  const { settings, entries, categories, month, dispatch } = useStore();
+  const { settings, allEntries, categories, month, dispatch } = useStore();
   const [rules, setRules] = useState<MoodRule[]>(settings.moods);
   const [showEmojiFor, setShowEmojiFor] = useState<string | null>(null);
 
@@ -29,8 +29,8 @@ export function MoodEditor({ open, onClose }: Props) {
 
   // Preview against the month currently in view on Home.
   const { total } = useMemo(
-    () => monthSummary(entries, categories, month),
-    [entries, categories, month],
+    () => monthSummary(allEntries, categories, month),
+    [allEntries, categories, month],
   );
   const current = useMemo(() => moodFor(rules, total), [rules, total]);
 
@@ -65,7 +65,7 @@ export function MoodEditor({ open, onClose }: Props) {
         <span className="mood-preview-emoji">{current.emoji}</span>
         <div>
           <strong>
-            {monthSummary(entries, categories, month).count} entries in view total{' '}
+            {monthSummary(allEntries, categories, month).count} entries in view total{' '}
             {formatMoney(total, settings)}
           </strong>
           <small>

@@ -1,21 +1,31 @@
 import { useMemo, useState } from 'react';
 import { useStore } from '../store/store';
-import type { Entry } from '../types';
+import type { Entry, VirtualEntry } from '../types';
 import { liveEntries } from '../lib/selectors';
-import { currentMonthKey, dayLabel, formatMoney, shiftMonth } from '../lib/utils';
+import { currentMonthKey, dayLabel, formatMoney, monthKey, shiftMonth } from '../lib/utils';
 import { entriesInMonth } from '../lib/selectors';
+import { isVirtual } from '../lib/recurring';
 import { SwipeRow } from '../components/SwipeRow';
 import { EntrySheet } from '../components/EntrySheet';
 import { MonthPicker } from '../components/MonthPicker';
 import './Analytics.css';
 
 export function AnalyticsPage() {
-  const { entries, settings, month, setMonth, dispatch } = useStore();
+  const { entries, allEntries, settings, month, setMonth, dispatch } = useStore();
   const [editing, setEditing] = useState<Entry | null>(null);
   const [pickingMonth, setPickingMonth] = useState(false);
 
+  /**
+   * Generated occurrences are edited through the series entry that owns them,
+   * so a tap on a repeat opens the original and stops there.
+   */
+  function resolveForEdit(entry: Entry): Entry {
+    if (!isVirtual(entry)) return entry;
+    return entries.find((e) => e.id === (entry as VirtualEntry).seriesId) ?? entry;
+  }
+
   const monthEntries = useMemo(() => {
-    const inMonth = entriesInMonth(entries, month);
+    const inMonth = entriesInMonth(allEntries, month);
     // Newest first, like a bank statement.
     return [...inMonth].sort((a, b) => {
       const key = (e: Entry) => `${e.date}T${e.time}`;
@@ -35,11 +45,11 @@ export function AnalyticsPage() {
   }, [monthEntries]);
 
   const totals = useMemo(() => {
-    const live = liveEntries(entriesInMonth(entries, month));
+    const live = liveEntries(entriesInMonth(allEntries, month));
     const total = live.reduce((s, e) => s + e.amount, 0);
     const cancelled = monthEntries.length - live.length;
     return { total, count: live.length, cancelled };
-  }, [entries, month, monthEntries.length]);
+  }, [allEntries, month, monthEntries.length]);
 
   const isCurrentMonth = month === currentMonthKey();
 
@@ -112,8 +122,17 @@ export function AnalyticsPage() {
                   <SwipeRow
                     key={entry.id}
                     entry={entry}
-                    onEdit={(e) => setEditing(e)}
-                    onCancel={(e) => dispatch({ type: 'cancelEntry', id: e.id, cancelled: !e.cancelled })}
+                    onEdit={(e) => setEditing(resolveForEdit(e))}
+                    onCancel={(e) =>
+                      isVirtual(e)
+                        ? // Skipping removes only this month from the series.
+                          dispatch({
+                            type: 'skipOccurrence',
+                            seriesId: (e as VirtualEntry).seriesId,
+                            month: monthKey(e.date),
+                          })
+                        : dispatch({ type: 'cancelEntry', id: e.id, cancelled: !e.cancelled })
+                    }
                   />
                 ))}
               </ul>

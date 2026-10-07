@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useReducer, useState } from 'react';
 import type { AppData, PageId } from '../types';
 import { currentMonthKey } from '../lib/utils';
 import { loadData, saveData } from '../lib/storage';
+import { expandEntries, stopRepeat, withSkippedMonth } from '../lib/recurring';
 import { OTHER_CATEGORY, MAX_QUICK_TILES } from '../data/defaults';
 import type { Action, AppStore } from './store';
 import { StoreContext } from './store';
@@ -27,6 +28,24 @@ function reducer(state: AppData, action: Action): AppData {
         ...state,
         entries: state.entries.map((e) =>
           e.id === action.id ? { ...e, cancelled: action.cancelled } : e,
+        ),
+      };
+
+    // Skips one month of a repeating series, leaving the rest of it intact.
+    case 'skipOccurrence':
+      return {
+        ...state,
+        entries: state.entries.map((e) =>
+          e.id === action.seriesId ? withSkippedMonth(e, action.month) : e,
+        ),
+      };
+
+    // Ends a series from this month on. Months already generated stay.
+    case 'stopSeries':
+      return {
+        ...state,
+        entries: state.entries.map((e) =>
+          e.id === action.seriesId ? stopRepeat(e, action.fromMonth) : e,
         ),
       };
 
@@ -102,7 +121,17 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const value = useMemo<AppStore>(
-    () => ({ ...data, dispatch, page, setPage, swipeTo, direction, month, setMonth }),
+    () => ({
+      ...data,
+      dispatch,
+      page,
+      setPage,
+      swipeTo,
+      direction,
+      allEntries: expandEntries(data.entries, currentMonthKey()),
+      month,
+      setMonth,
+    }),
     [data, page, setPage, swipeTo, direction, month],
   );
 

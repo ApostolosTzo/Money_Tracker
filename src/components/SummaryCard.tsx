@@ -10,12 +10,12 @@ interface Props {
 }
 
 export function SummaryCard({ onOpenCalendar }: Props) {
-  const { entries, categories, settings, month, setMonth } = useStore();
+  const { allEntries, categories, settings, month, setMonth } = useStore();
   const [editingMoods, setEditingMoods] = useState(false);
 
   const { total, byCategory, count } = useMemo(
-    () => monthSummary(entries, categories, month),
-    [entries, categories, month],
+    () => monthSummary(allEntries, categories, month),
+    [allEntries, categories, month],
   );
 
   const mood = useMemo(() => moodFor(settings.moods, total), [settings.moods, total]);

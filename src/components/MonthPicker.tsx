@@ -18,24 +18,24 @@ interface Props {
 
 /** Lists every month that has data (plus this month) with its total spent. */
 export function MonthPicker({ open, onClose }: Props) {
-  const { entries, categories, settings, month, setMonth } = useStore();
+  const { allEntries, categories, settings, month, setMonth } = useStore();
   const [expanded, setExpanded] = useState(false);
   const now = currentMonthKey();
 
   const months = useMemo(
-    () => allMonthKeys(entries, now).sort((a, b) => b.localeCompare(a)),
-    [entries, now],
+    () => allMonthKeys(allEntries, now).sort((a, b) => b.localeCompare(a)),
+    [allEntries, now],
   );
 
   const visible = expanded ? months : months.slice(0, 6);
   const best = useMemo(() => {
     let top: { key: string; total: number } | null = null;
     for (const key of months) {
-      const { total } = monthSummary(entries, categories, key);
+      const { total } = monthSummary(allEntries, categories, key);
       if (total > 0 && (!top || total > top.total)) top = { key, total };
     }
     return top;
-  }, [months, entries, categories]);
+  }, [months, allEntries, categories]);
 
   return (
     <Sheet open={open} onClose={onClose} title="Months" className="month-sheet">
@@ -48,7 +48,7 @@ export function MonthPicker({ open, onClose }: Props) {
 
       <ul className="month-list">
         {visible.map((key) => {
-          const { total, count } = monthSummary(entries, categories, key);
+          const { total, count } = monthSummary(allEntries, categories, key);
           return (
             <li key={key}>
               <button

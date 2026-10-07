@@ -32,6 +32,31 @@ export interface Entry {
    */
   cancelled: boolean;
   createdAt: number;
+
+  /** Set on the entry that starts a repeating series. */
+  repeat?: RepeatKind | null;
+  /**
+   * Last month the series produces an occurrence, inclusive, `YYYY-MM`.
+   * Absent means it runs up to the current month. Stopping a series sets this
+   * rather than clearing `repeat`, so already-recorded months survive.
+   */
+  repeatUntil?: string | null;
+  /** Months the user skipped, `YYYY-MM`. Skipping one month leaves the rest. */
+  skipMonths?: string[];
+}
+
+/** How often a series repeats. Only monthly for now. */
+export type RepeatKind = 'monthly';
+
+/**
+ * An occurrence generated from a repeating entry. Never stored, so it is
+ * rebuilt from the series on every load.
+ */
+export interface VirtualEntry extends Entry {
+  /** Marks this row as generated rather than something the user logged. */
+  virtual: true;
+  /** Id of the entry that owns the series. */
+  seriesId: string;
 }
 
 /** A mood reaction: shown while the month's total is at or below `max`. */

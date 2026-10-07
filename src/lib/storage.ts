@@ -88,6 +88,11 @@ export function migrate(raw: unknown): AppData {
           time: /^\d{2}:\d{2}$/.test(e.time) ? e.time : '00:00',
           cancelled: !!e.cancelled,
           createdAt: Number(e.createdAt) || 0,
+          repeat: e.repeat === 'monthly' ? 'monthly' : null,
+          repeatUntil: typeof e.repeatUntil === 'string' ? e.repeatUntil : null,
+          skipMonths: Array.isArray(e.skipMonths)
+            ? e.skipMonths.filter((m): m is string => typeof m === 'string' && /^\d{4}-\d{2}$/.test(m))
+            : [],
         }))
     : [];
 

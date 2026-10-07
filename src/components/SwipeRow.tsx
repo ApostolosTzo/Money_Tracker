@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import type { Entry } from '../types';
 import { useStore } from '../store/store';
 import { resolveCategory } from '../lib/selectors';
+import { isVirtual } from '../lib/recurring';
 import { formatMoney } from '../lib/utils';
 import './SwipeRow.css';
 
@@ -102,8 +103,8 @@ export function SwipeRow({ entry, onEdit, onCancel }: Props) {
           Edit
         </div>
         <div className="swipe-action swipe-action-cancel" style={{ opacity: offset < 0 ? reveal : 0 }}>
-          <span aria-hidden="true">{entry.cancelled ? '↩' : '⊘'}</span>
-          {entry.cancelled ? 'Restore' : 'Cancel'}
+          <span aria-hidden="true">{isVirtual(entry) ? '⤼' : entry.cancelled ? '↩' : '⊘'}</span>
+          {isVirtual(entry) ? 'Skip' : entry.cancelled ? 'Restore' : 'Cancel'}
         </div>
       </div>
 
@@ -126,6 +127,7 @@ export function SwipeRow({ entry, onEdit, onCancel }: Props) {
           <div className="swipe-line2">
             <span className="swipe-cat">
               {category.icon} {category.name}
+              {isVirtual(entry) ? <span className="swipe-repeat"> ↻ monthly</span> : null}
             </span>
             <span className="swipe-time">{entry.time}</span>
           </div>

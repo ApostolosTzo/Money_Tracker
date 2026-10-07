@@ -15,13 +15,13 @@ import './Settings.css';
 
 export function SettingsPage() {
   const store = useStore();
-  const { categories, settings, entries, dispatch } = store;
+  const { categories, settings, entries, allEntries, dispatch } = store;
   const [editingCategory, setEditingCategory] = useState<Category | null | undefined>(undefined);
   const [moodsOpen, setMoodsOpen] = useState(false);
   const [summaryOpen, setSummaryOpen] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
-  const allTime = useMemo(() => grandTotal(entries), [entries]);
+  const allTime = useMemo(() => grandTotal(allEntries), [allEntries]);
 
   function exportJson() {
     const payload: AppData = {
@@ -34,7 +34,7 @@ export function SettingsPage() {
   }
 
   function exportSummary(scope: 'all' | 'month') {
-    const text = buildSummary({ version: 1, entries, categories, settings }, {
+    const text = buildSummary({ version: 1, entries: allEntries, categories, settings }, {
       type: scope,
       month: scope === 'month' ? store.month : undefined,
     });
@@ -45,7 +45,7 @@ export function SettingsPage() {
   }
 
   function exportCsv() {
-    downloadText(timestampedName('money-tracker', 'csv'), buildCsv({ version: 1, entries, categories, settings }), 'text/csv');
+    downloadText(timestampedName('money-tracker', 'csv'), buildCsv({ version: 1, entries: allEntries, categories, settings }), 'text/csv');
   }
 
   async function importJson() {
@@ -79,7 +79,14 @@ export function SettingsPage() {
       <p className="section-title">Your money</p>
       <div className="card settings-card">
         <Row label="All-time spending" value={formatMoney(allTime, settings)} />
-        <Row label="Tracked entries" value={String(entries.length)} />
+        <Row
+          label="Tracked entries"
+          value={
+            allEntries.length === entries.length
+              ? String(entries.length)
+              : `${entries.length} logged · ${allEntries.length - entries.length} repeating`
+          }
+        />
         <Row
           label="Currently viewing"
           value={monthLabel(store.month)}
