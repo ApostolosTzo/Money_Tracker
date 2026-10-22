@@ -73,9 +73,9 @@
 }
 
 /*
- * The icon box is a pastel tint of the category colour and the glyph is drawn
- * in the colour itself. Nine solid squares shouted over each other; this lets
- * the colour still identify the category without taking over the page.
+ * The icon box is a tint of the category colour and the glyph is drawn in the
+ * colour itself. Nine solid squares shouted over each other; this lets the
+ * colour still identify the category without taking over the page.
  * `--tile-color` is set inline on .tile from the category.
  */
 .tile-icon {
@@ -85,7 +85,7 @@
   height: 54px;
   border-radius: 16px;
   color: var(--tile-color);
-  background: color-mix(in srgb, var(--tile-color) 14%, #fff);
+  background: color-mix(in srgb, var(--tile-color) 26%, #fff);
   transition: transform 0.12s ease;
 }
 
