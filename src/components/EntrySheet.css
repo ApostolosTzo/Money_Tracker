@@ -1,4 +1,4 @@
-.entry-amount {
+﻿.entry-amount {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -10,7 +10,7 @@
 .entry-amount-cur {
   font-size: 30px;
   font-weight: 700;
-  color: var(--purple-500);
+  color: var(--blue-500);
   opacity: 0.6;
 }
 
@@ -23,13 +23,13 @@
   font-size: 44px;
   font-weight: 800;
   letter-spacing: -0.03em;
-  color: var(--purple-700);
+  color: var(--blue-700);
   text-align: center;
   padding: 0;
 }
 
 .entry-amount-input::placeholder {
-  color: var(--purple-200);
+  color: var(--blue-200);
 }
 
 .preset-row {
@@ -43,9 +43,9 @@
 .preset-chip {
   padding: 9px 16px;
   border-radius: 999px;
-  background: var(--purple-50);
-  border: 1.5px solid var(--purple-200);
-  color: var(--purple-700);
+  background: var(--blue-50);
+  border: 1.5px solid var(--blue-200);
+  color: var(--blue-700);
   font-weight: 700;
   font-size: 14.5px;
   transition: transform 0.12s ease, background 0.15s ease;
@@ -56,8 +56,8 @@
 }
 
 .preset-chip.is-active {
-  background: var(--purple-600);
-  border-color: var(--purple-600);
+  background: var(--blue-600);
+  border-color: var(--blue-600);
   color: #fff;
 }
 
@@ -83,7 +83,7 @@
 .amount-slider::-webkit-slider-runnable-track {
   height: 8px;
   border-radius: 999px;
-  background: linear-gradient(90deg, var(--purple-300), var(--purple-500));
+  background: linear-gradient(90deg, var(--blue-300), var(--blue-500));
 }
 
 .amount-slider::-webkit-slider-thumb {
@@ -93,14 +93,14 @@
   margin-top: -9px;
   border-radius: 50%;
   background: #fff;
-  border: 3px solid var(--purple-600);
-  box-shadow: 0 2px 8px rgba(76, 29, 149, 0.28);
+  border: 3px solid var(--blue-600);
+  box-shadow: 0 2px 8px rgba(44, 55, 130, 0.26);
 }
 
 .amount-slider::-moz-range-track {
   height: 8px;
   border-radius: 999px;
-  background: linear-gradient(90deg, var(--purple-300), var(--purple-500));
+  background: linear-gradient(90deg, var(--blue-300), var(--blue-500));
 }
 
 .amount-slider::-moz-range-thumb {
@@ -108,7 +108,7 @@
   height: 22px;
   border-radius: 50%;
   background: #fff;
-  border: 3px solid var(--purple-600);
+  border: 3px solid var(--blue-600);
 }
 
 .slider-scale {

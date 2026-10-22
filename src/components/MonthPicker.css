@@ -1,4 +1,4 @@
-.month-sheet-best {
+﻿.month-sheet-best {
   margin: 0 0 14px;
   font-size: 13px;
   color: var(--text-muted);
@@ -32,8 +32,8 @@
 }
 
 .month-item.is-active {
-  background: var(--purple-50);
-  border-color: var(--purple-300);
+  background: var(--blue-50);
+  border-color: var(--blue-300);
 }
 
 .month-item-label {
@@ -58,7 +58,7 @@
   font-size: 15px;
   font-weight: 800;
   font-variant-numeric: tabular-nums;
-  color: var(--purple-700);
+  color: var(--blue-700);
 }
 
 .month-item-dot {

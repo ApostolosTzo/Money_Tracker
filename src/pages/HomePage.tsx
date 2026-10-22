@@ -21,9 +21,23 @@ export function HomePage() {
 
   return (
     <div className="page-scroll with-tabs home-page">
+      <header className="brand">
+        <span className="brand-mark" aria-hidden="true">
+          €
+        </span>
+        <span className="brand-copy">
+          <strong>Money Tracker</strong>
+          <small>Make every euro visible</small>
+        </span>
+      </header>
+
       <SummaryCard onOpenCalendar={() => setPickingMonth(true)} />
 
-      <h2 className="section-title">Quick add</h2>
+      <div className="section-head">
+        <p className="section-title">Quick add</p>
+        <h2 className="section-h2">What did you spend on?</h2>
+      </div>
+
       <div className="tile-grid">
         {categories.map((c) => (
           <QuickTile
@@ -103,8 +117,8 @@ function QuickTile({
       }}
       {...handlers}
     >
-      <span className="tile-icon" style={{ background: category.color }}>
-        <CategoryIcon category={category} size={34} />
+      <span className="tile-icon">
+        <CategoryIcon category={category} size={30} />
       </span>
       <span className="tile-name">{category.name}</span>
     </button>

@@ -6,6 +6,7 @@ import {
   OTHER_CATEGORY,
 } from '../data/defaults';
 import { resolveIconUpdate } from './iconUpdates';
+import { resolvePaletteUpdate } from './paletteUpdate';
 
 const STORAGE_KEY = 'money-tracker:v1';
 export const DATA_VERSION = 1;
@@ -64,7 +65,10 @@ export function migrate(raw: unknown): AppData {
             name: String(c.name ?? 'Untitled'),
             // Catch up built-in categories whose default icon has since changed.
             icon: resolveIconUpdate(c.id, storedIcon) ?? storedIcon,
-            color: /^#[0-9a-f]{6}$/i.test(c.color ?? '') ? c.color : '#6D28D9',
+            color: resolvePaletteUpdate(
+              c.id,
+              /^#[0-9a-f]{6}$/i.test(c.color ?? '') ? c.color : '#4457BE',
+            ),
             presets: Array.isArray(c.presets)
               ? c.presets.map((n) => Math.round(Number(n) * 100) / 100).filter((n) => n > 0)
               : [],

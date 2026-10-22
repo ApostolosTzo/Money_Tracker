@@ -1,4 +1,4 @@
-import type { CategoryTotal } from '../lib/selectors';
+﻿import type { CategoryTotal } from '../lib/selectors';
 import { formatMoney } from '../lib/utils';
 
 interface Props {
@@ -52,7 +52,7 @@ export function CategoryDonut({
           cy={CENTER}
           r={RADIUS}
           fill="none"
-          stroke="var(--purple-100)"
+          stroke="var(--blue-100)"
           strokeWidth={STROKE}
         />
         <g transform={`rotate(-90 ${CENTER} ${CENTER})`}>

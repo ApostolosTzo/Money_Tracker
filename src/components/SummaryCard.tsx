@@ -23,12 +23,12 @@ export function SummaryCard({ onOpenCalendar }: Props) {
 
   return (
     <>
-      <section className="summary card" aria-label="Monthly summary">
+      <section className="summary" aria-label="Monthly summary">
         <header className="summary-head">
           <div className="summary-head-text">
-            <h1 className="summary-month">{monthLabel(month)}</h1>
+            <h1 className="summary-month">Spent this month</h1>
             <p className="summary-sub">
-              {count} {count === 1 ? 'entry' : 'entries'}
+              {monthLabel(month)} · {count} {count === 1 ? 'entry' : 'entries'}
             </p>
           </div>
           <button

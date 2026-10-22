@@ -124,6 +124,18 @@ Everything lives in `localStorage` under `money-tracker:v1`. Nothing leaves the
 phone. That means clearing browser data wipes it, so export a backup now and
 then.
 
+### Colour migration
+
+Tiles store their own colour, so redesigning the palette only changes fresh
+installs. `src/lib/paletteUpdate.ts` catches an existing device up, following
+the same pattern as the icon migrations: a shipped colour is replaced with its
+new default, but **only when the stored colour is still the one that shipped**.
+Anything you picked yourself in Settings is left alone, and re-running the
+migration is a no-op.
+
+The chrome does not need this — backgrounds, buttons and the tab bar read from
+the CSS custom properties in `src/styles/global.css` and follow automatically.
+
 ## Project layout
 
 ```

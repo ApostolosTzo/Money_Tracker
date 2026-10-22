@@ -1,4 +1,4 @@
-.cat-preview {
+﻿.cat-preview {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -19,7 +19,7 @@
   font-size: 27px;
   color: #fff;
   box-shadow:
-    0 1px 2px rgba(28, 18, 48, 0.16),
+    0 1px 2px rgba(22, 32, 58, 0.18),
     inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
@@ -45,7 +45,7 @@
   border: 1.5px solid var(--border);
   font-weight: 700;
   font-size: 14px;
-  color: var(--purple-700);
+  color: var(--blue-700);
 }
 
 .emoji-grid {
@@ -68,8 +68,8 @@
 }
 
 .emoji-cell.is-active {
-  border-color: var(--purple-500);
-  background: var(--purple-100);
+  border-color: var(--blue-500);
+  background: var(--blue-100);
 }
 
 .cat-icon-text {
@@ -218,7 +218,7 @@
 }
 
 .switch:checked {
-  background: var(--purple-600);
+  background: var(--blue-600);
 }
 
 .switch:checked::after {

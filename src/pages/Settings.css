@@ -1,4 +1,4 @@
-.settings-title {
+﻿.settings-title {
   font-size: 24px;
   font-weight: 800;
   letter-spacing: -0.02em;
@@ -30,16 +30,16 @@
 .settings-row-value {
   font-size: 14.5px;
   font-weight: 800;
-  color: var(--purple-700);
+  color: var(--blue-700);
   font-variant-numeric: tabular-nums;
 }
 
 .settings-row-action {
   padding: 6px 12px;
   border-radius: 999px;
-  background: var(--purple-50);
-  border: 1px solid var(--purple-200);
-  color: var(--purple-700);
+  background: var(--blue-50);
+  border: 1px solid var(--blue-200);
+  color: var(--blue-700);
   font-size: 12.5px;
   font-weight: 700;
 }
@@ -126,9 +126,9 @@
 }
 
 .settings-tile-add .settings-tile-icon {
-  background: var(--purple-50);
-  border-color: var(--purple-200);
-  color: var(--purple-600);
+  background: var(--blue-50);
+  border-color: var(--blue-200);
+  color: var(--blue-600);
 }
 
 .settings-tile-copy {

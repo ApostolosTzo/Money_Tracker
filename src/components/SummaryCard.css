@@ -1,7 +1,52 @@
+﻿/*
+ * The month total is the one bold thing on the page: a deep indigo gradient
+ * with white type, and two faint rings clipped by the corner for depth.
+ * Everything below it on the page stays quiet and white.
+ */
 .summary {
-  padding: 16px 16px 12px;
-  background: linear-gradient(165deg, #FFFFFF 0%, var(--purple-50) 100%);
-  border-color: var(--purple-200);
+  position: relative;
+  overflow: hidden;
+  padding: 18px 17px 14px;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(
+    150deg,
+    var(--hero-from) 0%,
+    var(--hero-via) 52%,
+    var(--hero-to) 100%
+  );
+  border: none;
+  color: #fff;
+  box-shadow: var(--shadow-hero);
+}
+
+/* Concentric rings, top right, deliberately clipped by the card edge. */
+.summary::before,
+.summary::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.13);
+  pointer-events: none;
+}
+
+.summary::before {
+  width: 240px;
+  height: 240px;
+  top: -118px;
+  right: -64px;
+}
+
+.summary::after {
+  width: 360px;
+  height: 360px;
+  top: -178px;
+  right: -124px;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.summary > * {
+  position: relative;
+  z-index: 1;
 }
 
 .summary-head {
@@ -12,88 +57,86 @@
 }
 
 .summary-month {
-  font-size: 13px;
+  font-size: 11px;
   font-weight: 800;
-  letter-spacing: 0.11em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--purple-600);
-  margin: 0 0 2px;
+  color: rgba(255, 255, 255, 0.72);
+  margin: 0 0 3px;
 }
 
 .summary-sub {
   margin: 0;
   font-size: 12px;
-  color: var(--text-faint);
+  color: rgba(255, 255, 255, 0.5);
   font-weight: 600;
 }
 
-/* mood button */
+/* mood button: frosted chip sitting on the gradient */
 .summary-mood {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1px;
-  padding: 6px 10px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.75);
-  border: 1.5px solid var(--purple-200);
+  padding: 7px 11px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(8px);
   transition: transform 0.14s ease, background 0.15s ease;
   flex: none;
 }
 
 .summary-mood:active {
-  transform: scale(0.9);
-  background: var(--purple-100);
+  transform: scale(0.92);
+  background: rgba(255, 255, 255, 0.26);
 }
 
 .summary-mood-emoji {
-  font-size: 27px;
+  font-size: 26px;
   line-height: 1.1;
 }
 
 .summary-mood-label {
   font-size: 9.5px;
   font-weight: 700;
-  color: var(--text-faint);
+  color: rgba(255, 255, 255, 0.75);
   white-space: nowrap;
 }
 
-/* big total */
+/* the big number */
 .summary-total {
   display: flex;
   align-items: baseline;
-  gap: 3px;
-  margin: 10px 0 14px;
-  padding-bottom: 14px;
-  border-bottom: 1px dashed var(--border-strong);
+  gap: 4px;
+  margin: 12px 0 15px;
 }
 
 .summary-total-cur {
-  font-size: 24px;
+  font-size: 26px;
   font-weight: 700;
-  color: var(--purple-400);
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .summary-total-value {
-  font-size: 42px;
+  font-size: 46px;
   font-weight: 800;
-  letter-spacing: -0.035em;
-  color: var(--purple-700);
+  letter-spacing: -0.04em;
+  color: #fff;
   line-height: 1;
+  font-variant-numeric: tabular-nums;
 }
 
 .summary-empty {
-  margin: 0 0 12px;
+  margin: 0 0 15px;
   font-size: 13px;
-  color: var(--text-muted);
-  padding-bottom: 12px;
-  border-bottom: 1px dashed var(--border-strong);
+  color: rgba(255, 255, 255, 0.62);
 }
 
-/* top-3 bars */
+/* top-3 bars, translucent so they read as part of the gradient */
 .summary-bars {
   list-style: none;
-  margin: 0 0 12px;
+  margin: 0 0 14px;
   padding: 0;
   display: flex;
   flex-direction: column;
@@ -102,24 +145,24 @@
 
 .bar-row {
   display: grid;
-  grid-template-columns: minmax(0, 86px) 1fr auto;
+  grid-template-columns: minmax(0, 82px) 1fr auto;
   align-items: center;
-  gap: 8px;
+  gap: 9px;
 }
 
 .bar-name {
   font-size: 12.5px;
   font-weight: 700;
-  color: var(--text-muted);
+  color: rgba(255, 255, 255, 0.78);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .bar-track {
-  height: 8px;
+  height: 7px;
   border-radius: 999px;
-  background: var(--purple-100);
+  background: rgba(255, 255, 255, 0.18);
   overflow: hidden;
 }
 
@@ -127,32 +170,38 @@
   display: block;
   height: 100%;
   border-radius: 999px;
+  box-shadow: 0 0 0 0.5px rgba(255, 255, 255, 0.25);
   transition: width 0.35s cubic-bezier(0.32, 0.72, 0, 1);
 }
 
 .bar-value {
   font-size: 13px;
   font-weight: 800;
-  color: var(--text);
+  color: #fff;
   font-variant-numeric: tabular-nums;
   min-width: 52px;
   text-align: right;
 }
 
-/* month nav */
+/* month nav, frosted to sit on the gradient */
 .month-nav {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-top: 4px;
 }
 
 .month-nav .icon-btn {
-  width: 34px;
-  height: 34px;
+  width: 36px;
+  height: 36px;
   font-size: 20px;
   font-weight: 700;
   line-height: 1;
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
+}
+
+.month-nav .icon-btn:active {
+  background: rgba(255, 255, 255, 0.3);
 }
 
 .month-pill {
@@ -163,17 +212,17 @@
   gap: 7px;
   height: 38px;
   border-radius: 999px;
-  background: var(--surface);
-  border: 1.5px solid var(--purple-200);
-  color: var(--purple-700);
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  color: #fff;
   font-weight: 700;
   font-size: 14.5px;
-  box-shadow: var(--shadow-sm);
-  transition: transform 0.12s ease;
+  transition: transform 0.12s ease, background 0.15s ease;
 }
 
 .month-pill:active {
   transform: scale(0.97);
+  background: rgba(255, 255, 255, 0.28);
 }
 
 .month-pill-icon {

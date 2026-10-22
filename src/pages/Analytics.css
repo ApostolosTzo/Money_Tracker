@@ -37,7 +37,7 @@
   font-weight: 800;
   letter-spacing: 0.09em;
   text-transform: uppercase;
-  color: var(--purple-500);
+  color: var(--blue-500);
 }
 
 .analytics-month-total {
@@ -54,9 +54,9 @@
   margin-bottom: 10px;
   padding: 9px;
   border-radius: var(--radius-sm);
-  background: var(--purple-50);
-  border: 1px solid var(--purple-200);
-  color: var(--purple-700);
+  background: var(--blue-50);
+  border: 1px solid var(--blue-200);
+  color: var(--blue-700);
   font-size: 13px;
   font-weight: 700;
 }
@@ -115,7 +115,7 @@
 }
 
 .day-head span:last-child {
-  color: var(--purple-600);
+  color: var(--blue-600);
   font-variant-numeric: tabular-nums;
 }
 

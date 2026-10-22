@@ -1,24 +1,34 @@
-:root {
-  --purple-50: #F5F3FF;
-  --purple-100: #EDE9FE;
-  --purple-200: #DDD6FE;
-  --purple-300: #C4B5FD;
-  --purple-400: #A78BFA;
-  --purple-500: #8B5CF6;
-  --purple-600: #7C3AED;
-  --purple-700: #6D28D9;
-  --purple-800: #5B21B6;
-  --purple-900: #4C1D95;
+﻿:root {
+  /*
+   * Cool indigo, desaturated toward slate so it reads calm and bank-like
+   * rather than the bright violet this replaced. Neutrals carry a blue cast;
+   * nothing here is warm.
+   */
+  --blue-50: #F1F5FF;
+  --blue-100: #E3EAFD;
+  --blue-200: #C8D5F8;
+  --blue-300: #A4B7EF;
+  --blue-400: #7C93E3;
+  --blue-500: #5B72D4;
+  --blue-600: #4457BE;
+  --blue-700: #35439B;
+  --blue-800: #29336F;
+  --blue-900: #1D2450;
 
-  --bg: #F7F5FC;
+  /* Hero card, the one bold moment on the page. */
+  --hero-from: #5A6FD6;
+  --hero-via: #4457BE;
+  --hero-to: #2C3782;
+
+  --bg: #EDF1F9;
   --surface: #FFFFFF;
-  --surface-alt: #FAF8FF;
-  --border: #E9E4F5;
-  --border-strong: #D9D0EE;
+  --surface-alt: #F6F8FC;
+  --border: #DFE6F3;
+  --border-strong: #C9D4E8;
 
-  --text: #1C1230;
-  --text-muted: #6B6382;
-  --text-faint: #9A93AE;
+  --text: #16203A;
+  --text-muted: #3F4D6B;
+  --text-faint: #5E6B87;
 
   --danger: #DC2626;
   --danger-soft: #FEE2E2;
@@ -29,9 +39,11 @@
   --radius-lg: 22px;
   --radius-xl: 28px;
 
-  --shadow-sm: 0 1px 2px rgba(28, 18, 48, 0.06);
-  --shadow: 0 4px 16px rgba(76, 29, 149, 0.08);
-  --shadow-lg: 0 12px 40px rgba(76, 29, 149, 0.16);
+  /* Shadows are tinted with the ink, not black, so they sit in the same family. */
+  --shadow-sm: 0 1px 2px rgba(22, 32, 58, 0.06);
+  --shadow: 0 4px 16px rgba(22, 32, 58, 0.08);
+  --shadow-lg: 0 12px 40px rgba(22, 32, 58, 0.16);
+  --shadow-hero: 0 14px 30px -10px rgba(44, 55, 130, 0.5);
 
   --tab-h: 62px;
   --safe-b: env(safe-area-inset-bottom, 0px);
@@ -100,7 +112,7 @@ select {
 
 @media (min-width: 520px) {
   body {
-    background: linear-gradient(160deg, #EDE9FE 0%, #F7F5FC 45%, #DDD6FE 100%);
+    background: linear-gradient(160deg, #DCE4F7 0%, #EDF1F9 45%, #CBD7F0 100%);
   }
 
   .app-shell {
@@ -187,12 +199,30 @@ select {
 }
 
 .section-title {
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.09em;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-faint);
   margin: 22px 4px 10px;
+}
+
+/* Eyebrow over a real heading, so a section has a voice and not just a tag. */
+.section-head {
+  margin: 24px 4px 12px;
+}
+
+.section-head .section-title {
+  margin: 0 0 3px;
+}
+
+.section-h2 {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  color: var(--text);
+  margin: 0;
 }
 
 .btn {
@@ -217,15 +247,15 @@ select {
 }
 
 .btn-primary {
-  background: var(--purple-600);
+  background: var(--blue-600);
   color: #fff;
-  box-shadow: 0 4px 14px rgba(124, 58, 237, 0.32);
+  box-shadow: 0 4px 14px rgba(68, 87, 190, 0.36);
 }
 
 .btn-ghost {
-  background: var(--purple-50);
-  color: var(--purple-700);
-  border: 1px solid var(--purple-200);
+  background: var(--blue-50);
+  color: var(--blue-700);
+  border: 1px solid var(--blue-200);
 }
 
 .btn-danger {
@@ -243,8 +273,8 @@ select {
   border-radius: 50%;
   display: grid;
   place-items: center;
-  background: var(--purple-50);
-  color: var(--purple-700);
+  background: var(--blue-50);
+  color: var(--blue-700);
   font-size: 17px;
   flex: none;
   transition: transform 0.12s ease, background 0.15s ease;
@@ -252,7 +282,7 @@ select {
 
 .icon-btn:active {
   transform: scale(0.9);
-  background: var(--purple-200);
+  background: var(--blue-200);
 }
 
 .field {
@@ -280,7 +310,7 @@ select {
 }
 
 .input:focus {
-  border-color: var(--purple-400);
+  border-color: var(--blue-400);
   background: #fff;
 }
 

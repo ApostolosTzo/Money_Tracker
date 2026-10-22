@@ -1,4 +1,4 @@
-import type { Category, MoodRule } from '../types';
+﻿import type { Category, MoodRule } from '../types';
 
 /**
  * Upper bound on quick tiles. The grid is three across, so this is a row
@@ -11,74 +11,74 @@ export const DEFAULT_CATEGORIES: Category[] = [
   {
     id: 'coffee',
     name: 'Coffee',
-    icon: '☕',
-    color: '#8B5CF6',
+    icon: 'β•',
+    color: '#8878D6',
     presets: [1.5, 1.7, 2.6],
   },
   {
     id: 'food',
     name: 'Food',
-    icon: '🍔',
-    color: '#F97316',
+    icon: 'π”',
+    color: '#E8823E',
     presets: [5, 8, 12],
   },
   {
     id: 'kiosk',
     name: 'Kiosk',
     // Shop front: a kiosk is a small store, not a newsstand stand.
-    icon: '🏪',
-    color: '#0EA5E9',
+    icon: 'π',
+    color: '#34A6C4',
     presets: [0.5, 1, 2],
   },
   {
     id: 'fuel',
     name: 'Fuel',
-    icon: '⛽',
-    color: '#10B981',
+    icon: 'β›½',
+    color: '#3E9E78',
     presets: [20, 50, 80],
     slider: true,
   },
   {
     id: 'cigarette',
     name: 'Cigarette',
-    icon: '🚬',
-    color: '#64748B',
+    icon: 'π¬',
+    color: '#7A889F',
     presets: [1, 2.5, 7.8],
   },
   {
     id: 'iris',
     name: 'Iris',
     // Bank emoji.
-    icon: '🏦',
-    color: '#EC4899',
+    icon: 'π¦',
+    color: '#D4688F',
     presets: [],
   },
   {
     id: 'subscriptions',
     name: 'Subscriptions',
-    icon: '🔁',
-    color: '#6366F1',
+    icon: 'π”',
+    color: '#5263C8',
     presets: [2.99, 5.99, 9.99],
   },
   {
     id: 'supermarket',
     name: 'Supermarket',
-    icon: '🛒',
-    color: '#F59E0B',
+    icon: 'π›’',
+    color: '#DFA23C',
     presets: [10, 25, 50],
   },
   {
     id: 'alcohol',
     name: 'Alcohol',
-    icon: '🍺',
-    color: '#A855F7',
+    icon: 'πΊ',
+    color: '#A65F9E',
     presets: [3, 5, 8],
   },
   {
     id: 'oasa',
     name: 'OASA',
-    icon: '🚇',
-    color: '#2563EB',
+    icon: 'π‡',
+    color: '#4589CE',
     presets: [1.2],
   },
 ];
@@ -89,8 +89,8 @@ export const OTHER_CATEGORY_ID = 'other';
 export const OTHER_CATEGORY: Category = {
   id: OTHER_CATEGORY_ID,
   name: 'Other',
-  icon: '✏️',
-  color: '#78716C',
+  icon: 'βοΈ',
+  color: '#8391A8',
   presets: [],
 };
 
@@ -99,16 +99,16 @@ export const OTHER_CATEGORY: Category = {
  * The catch-all (max: null) must stay last.
  */
 export const DEFAULT_MOODS: MoodRule[] = [
-  { id: 'm1', emoji: '😄', label: 'Cheap month', max: 50 },
-  { id: 'm2', emoji: '🙂', label: 'OK', max: 100 },
-  { id: 'm3', emoji: '😐', label: 'Getting there', max: 200 },
-  { id: 'm4', emoji: '😬', label: 'Careful', max: 400 },
-  { id: 'm5', emoji: '💸', label: 'Ouch', max: null },
+  { id: 'm1', emoji: 'π„', label: 'Cheap month', max: 50 },
+  { id: 'm2', emoji: 'π™‚', label: 'OK', max: 100 },
+  { id: 'm3', emoji: 'π', label: 'Getting there', max: 200 },
+  { id: 'm4', emoji: 'π¬', label: 'Careful', max: 400 },
+  { id: 'm5', emoji: 'π’Έ', label: 'Ouch', max: null },
 ];
 
 /** Emoji offered in the picker. */
 export const EMOJI_CHOICES = [
-  '😄', '🙂', '😐', '😕', '😟', '🙁', '😫', '😡', '🤯', '💸',
-  '🥲', '😭', '🥳', '😎', '🤓', '🫠', '😴', '🤠', '👻', '💀',
-  '🔥', '⭐', '💚', '💜', '❤️',
+  'π„', 'π™‚', 'π', 'π•', 'π', 'π™', 'π«', 'π΅', 'π¤―', 'π’Έ',
+  'π¥²', 'π­', 'π¥³', 'π', 'π¤“', 'π« ', 'π΄', 'π¤ ', 'π‘»', 'π’€',
+  'π”¥', 'β­', 'π’', 'π’', 'β¤οΈ',
 ];

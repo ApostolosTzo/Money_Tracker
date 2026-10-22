@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite';
+﻿import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 
@@ -12,8 +12,8 @@ export default defineConfig({
         name: 'Money Tracker',
         short_name: 'Money',
         description: 'Track what you spend each month.',
-        theme_color: '#6D28D9',
-        background_color: '#FFFFFF',
+        theme_color: '#4457BE',
+        background_color: '#EDF1F9',
         display: 'standalone',
         orientation: 'portrait',
         start_url: '/',

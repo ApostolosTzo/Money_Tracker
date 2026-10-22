@@ -1,11 +1,11 @@
-.mood-preview {
+﻿.mood-preview {
   display: flex;
   align-items: center;
   gap: 14px;
   padding: 14px 16px;
   border-radius: var(--radius-lg);
-  background: var(--purple-50);
-  border: 1.5px solid var(--purple-200);
+  background: var(--blue-50);
+  border: 1.5px solid var(--blue-200);
   margin-bottom: 10px;
 }
 
@@ -24,7 +24,7 @@
 
 .mood-preview strong {
   font-size: 13.5px;
-  color: var(--purple-800);
+  color: var(--blue-800);
 }
 
 .mood-preview small {

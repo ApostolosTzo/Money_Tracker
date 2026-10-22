@@ -1,4 +1,4 @@
-/* Donut chart of the month by category */
+﻿/* Donut chart of the month by category */
 
 .donut {
   display: flex;
@@ -26,7 +26,7 @@
 .donut-total {
   font-size: 21px;
   font-weight: 800;
-  fill: var(--purple-700);
+  fill: var(--blue-700);
   letter-spacing: -0.02em;
 }
 
@@ -84,7 +84,7 @@
 .donut-legend-value {
   font-size: 13px;
   font-weight: 800;
-  color: var(--purple-700);
+  color: var(--blue-700);
   font-variant-numeric: tabular-nums;
   min-width: 66px;
   text-align: right;
@@ -130,7 +130,7 @@
 .day-bar-track {
   height: 10px;
   border-radius: 999px;
-  background: var(--purple-50);
+  background: var(--blue-50);
   overflow: hidden;
 }
 

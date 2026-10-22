@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+﻿import { useMemo, useState } from 'react';
 import { useStore } from '../store/store';
 import { monthSummary } from '../lib/selectors';
 import {
@@ -41,7 +41,7 @@ export function MonthPicker({ open, onClose }: Props) {
     <Sheet open={open} onClose={onClose} title="Months" className="month-sheet">
       {best ? (
         <p className="month-sheet-best">
-          Heaviest month: <strong>{monthLabel(best.key)}</strong> ·{' '}
+          Heaviest month: <strong>{monthLabel(best.key)}</strong> Β·{' '}
           {formatMoney(best.total, settings)}
         </p>
       ) : null}
@@ -73,8 +73,8 @@ export function MonthPicker({ open, onClose }: Props) {
                       total === 0
                         ? 'var(--border-strong)'
                         : key === month
-                          ? 'var(--purple-600)'
-                          : 'var(--purple-300)',
+                          ? 'var(--blue-600)'
+                          : 'var(--blue-300)',
                   }}
                   aria-hidden="true"
                 />
@@ -96,14 +96,14 @@ export function MonthPicker({ open, onClose }: Props) {
           className="btn btn-ghost"
           onClick={() => setMonth(shiftMonth(month, -1))}
         >
-          ‹ {monthLabel(shiftMonth(month, -1)).split(' ')[0]}
+          β€Ή {monthLabel(shiftMonth(month, -1)).split(' ')[0]}
         </button>
         <button
           type="button"
           className="btn btn-ghost"
           onClick={() => setMonth(shiftMonth(month, 1))}
         >
-          {monthLabel(shiftMonth(month, 1)).split(' ')[0]} ›
+          {monthLabel(shiftMonth(month, 1)).split(' ')[0]} β€Ί
         </button>
       </div>
     </Sheet>
