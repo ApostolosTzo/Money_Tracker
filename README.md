@@ -95,6 +95,18 @@ lands the same each month.
 - Deleting a series entry deletes every month generated from it, so the
   confirmation says so.
 
+### Analytics charts
+
+Above the statement, the month is broken down two ways:
+
+- **By category** — a donut with the month's total in the middle and each
+  category as a colour-coded slice. Percentages are printed on the slices big
+  enough to hold one, and the legend lists every category with its share and
+  amount. Cancelled entries are excluded from both the slices and the total.
+- **By day** — one horizontal bar per day, length relative to the heaviest
+  day, split into coloured segments by category. The shape of the month is
+  readable at a glance.
+
 ## Exports
 
 **JSON backup** holds entries, tiles, reaction rules and settings. Import

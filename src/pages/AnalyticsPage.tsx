@@ -1,17 +1,20 @@
 import { useMemo, useState } from 'react';
 import { useStore } from '../store/store';
-import type { Entry, VirtualEntry } from '../types';
+import type { Category, Entry, VirtualEntry } from '../types';
 import { liveEntries } from '../lib/selectors';
 import { currentMonthKey, dayLabel, formatMoney, monthKey, shiftMonth } from '../lib/utils';
-import { entriesInMonth } from '../lib/selectors';
+import { entriesInMonth, monthSummary, resolveCategory } from '../lib/selectors';
 import { isVirtual } from '../lib/recurring';
 import { SwipeRow } from '../components/SwipeRow';
 import { EntrySheet } from '../components/EntrySheet';
 import { MonthPicker } from '../components/MonthPicker';
+import { CategoryDonut } from '../components/CategoryDonut';
+import { DayBreakdown, type DayBar } from '../components/DayBreakdown';
 import './Analytics.css';
+import './AnalyticsCharts.css';
 
 export function AnalyticsPage() {
-  const { entries, allEntries, settings, month, setMonth, dispatch } = useStore();
+  const { entries, allEntries, categories, settings, month, setMonth, dispatch } = useStore();
   const [editing, setEditing] = useState<Entry | null>(null);
   const [pickingMonth, setPickingMonth] = useState(false);
 
@@ -50,6 +53,41 @@ export function AnalyticsPage() {
     const cancelled = monthEntries.length - live.length;
     return { total, count: live.length, cancelled };
   }, [allEntries, month, monthEntries.length]);
+
+  // Share of the month's total per category, for the donut.
+  const byCategory = useMemo(
+    () => monthSummary(allEntries, categories, month).byCategory,
+    [allEntries, categories, month],
+  );
+
+  // One bar per day, split by category.
+  const dayBars = useMemo<DayBar[]>(() => {
+    const live = liveEntries(entriesInMonth(allEntries, month));
+    const byDay = new Map<string, Entry[]>();
+    for (const e of live) {
+      const list = byDay.get(e.date) ?? [];
+      list.push(e);
+      byDay.set(e.date, list);
+    }
+    return [...byDay.entries()]
+      .sort((a, b) => a[0].localeCompare(b[0]))
+      .map(([date, items]) => {
+        const total = items.reduce((s, e) => s + e.amount, 0);
+        const perCategory = new Map<string, { category: Category; amount: number }>();
+        for (const e of items) {
+          const category = resolveCategory(categories, e.categoryId);
+          const bucket = perCategory.get(category.id) ?? { category, amount: 0 };
+          bucket.amount += e.amount;
+          perCategory.set(category.id, bucket);
+        }
+        return {
+          date,
+          label: dayLabel(date, settings.locale),
+          total,
+          segments: [...perCategory.values()].sort((a, b) => b.amount - a.amount),
+        };
+      });
+  }, [allEntries, categories, month, settings.locale]);
 
   const isCurrentMonth = month === currentMonthKey();
 
@@ -100,6 +138,25 @@ export function AnalyticsPage() {
           <span className="analytics-stats-cancelled">{totals.cancelled} cancelled</span>
         ) : null}
       </div>
+
+      {byCategory.length > 0 ? (
+        <section className="chart-card" aria-label="Spending by category">
+          <h2 className="chart-title">By category</h2>
+          <CategoryDonut
+            rows={byCategory}
+            total={totals.total}
+            currency={settings.currency}
+            locale={settings.locale}
+          />
+        </section>
+      ) : null}
+
+      {dayBars.length > 0 ? (
+        <section className="chart-card" aria-label="Spending by day">
+          <h2 className="chart-title">By day</h2>
+          <DayBreakdown days={dayBars} currency={settings.currency} locale={settings.locale} />
+        </section>
+      ) : null}
 
       {monthEntries.length === 0 ? (
         <div className="empty">

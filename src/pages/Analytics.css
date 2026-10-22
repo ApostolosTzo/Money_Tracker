@@ -1,4 +1,4 @@
-.analytics-page {
+﻿.analytics-page {
   padding-top: 10px;
 }
 
@@ -73,6 +73,25 @@
 .analytics-stats-cancelled {
   color: var(--danger);
   text-decoration: line-through;
+}
+
+/* chart cards above the statement */
+.chart-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: 14px 15px 16px;
+  margin-bottom: 12px;
+}
+
+.chart-title {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin: 0 0 12px;
 }
 
 .day-group {
