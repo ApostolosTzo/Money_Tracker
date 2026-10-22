@@ -1,4 +1,4 @@
-﻿.swipe-item {
+.swipe-item {
   position: relative;
   list-style: none;
   overflow: hidden;
@@ -89,7 +89,7 @@
   font-size: 15px;
   font-weight: 800;
   font-variant-numeric: tabular-nums;
-  color: var(--blue-700);
+  color: var(--accent-text);
   flex: none;
 }
 

@@ -70,9 +70,14 @@ export interface MoodRule {
 
 export type PageId = 'home' | 'analytics' | 'settings';
 
+/** Bottom tab bar visibility (can also be reached by swiping). */
+export type ThemeChoice = 'light' | 'dark' | 'system';
+
 export interface Settings {
   /** Bottom tab bar visibility (can also be reached by swiping). */
   showTabs: boolean;
+  /** Colour theme. `system` follows the OS preference. */
+  theme: ThemeChoice;
   /** Page shown on launch. */
   startPage: PageId;
   currency: string;

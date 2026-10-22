@@ -1,4 +1,4 @@
-﻿:root {
+:root {
   /*
    * Cool indigo, desaturated toward slate so it reads calm and bank-like
    * rather than the bright violet this replaced. Neutrals carry a blue cast;
@@ -15,6 +15,15 @@
   --blue-800: #29336F;
   --blue-900: #1D2450;
 
+  /*
+   * The ramp is used two ways that need to move in opposite directions on a
+   * dark surface: -50/-100/-200 are always the subtle fill and its border,
+   * while -600/-700/-800 are always text on that fill. Rather than invert the
+   * ramp, the text role gets its own token so a button can stay deep indigo
+   * while the same colour as text on a dark card becomes light.
+   */
+  --accent-text: #35439B;
+
   /* Hero card, the one bold moment on the page. */
   --hero-from: #5A6FD6;
   --hero-via: #4457BE;
@@ -23,12 +32,33 @@
   --bg: #EDF1F9;
   --surface: #FFFFFF;
   --surface-alt: #F6F8FC;
+  /* A raised panel: popovers, slider handles, the colour picker wells. */
+  --raised: #FFFFFF;
   --border: #DFE6F3;
   --border-strong: #C9D4E8;
 
   --text: #16203A;
   --text-muted: #3F4D6B;
   --text-faint: #5E6B87;
+
+  --on-accent: #FFFFFF;
+  --scrim: rgba(22, 32, 58, 0.45);
+  --tabbar: rgba(255, 255, 255, 0.9);
+  --handle-ring: #111111;
+
+  /*
+   * Quick-tile icon box. The glyph is drawn in the category colour on a mix of
+   * that colour and this base, so the base has to flip with the theme or a
+   * dark glyph lands on its own dark box and disappears.
+   *
+   * Only the *weight* is a token, not the mix itself: `--tile-color` is set
+   * inline per tile, so an expression referencing it declared here would be
+   * substituted before that value exists and collapse to nothing. The mix
+   * happens on .tile-icon, where the colour is actually in scope.
+   */
+  --tile-box-base: #FFFFFF;
+  --tile-tint: 26%;
+  --tile-ink-weight: 100%;
 
   --danger: #DC2626;
   --danger-soft: #FEE2E2;
@@ -49,6 +79,57 @@
   --safe-b: env(safe-area-inset-bottom, 0px);
 
   --font: 'Segoe UI', system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif;
+  color-scheme: light;
+}
+
+/*
+ * Dark theme. Values are chosen, not inverted: the page drops to a near-black
+ * blue, cards lift just enough to separate, and the accent tints become dark
+ * fills instead of pale ones.
+ */
+[data-theme='dark'] {
+  --blue-50: #1B2140;
+  --blue-100: #232A4D;
+  --blue-200: #333C63;
+  --blue-300: #4A5680;
+
+  --accent-text: #A4B7EF;
+
+  --hero-from: #5568CE;
+  --hero-via: #3F51AE;
+  --hero-to: #262F6B;
+
+  --bg: #0E1120;
+  --surface: #171B2E;
+  --surface-alt: #1E2338;
+  --raised: #222842;
+  --border: #262C45;
+  --border-strong: #39425F;
+
+  --text: #E8ECF7;
+  --text-muted: #A9B4CE;
+  --text-faint: #8592AE;
+
+  --on-accent: #FFFFFF;
+  --scrim: rgba(0, 0, 0, 0.62);
+  --tabbar: rgba(23, 27, 46, 0.9);
+  --handle-ring: #E8ECF7;
+
+  --tile-box-base: #171B2E;
+  --tile-tint: 16%;
+  /* Lift the category colour off a dark box rather than leaving it as-is. */
+  --tile-ink-weight: 62%;
+
+  --danger: #F87171;
+  --danger-soft: #3A1D22;
+  --success: #34D399;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow: 0 4px 16px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.55);
+  --shadow-hero: 0 14px 30px -12px rgba(0, 0, 0, 0.6);
+
+  color-scheme: dark;
 }
 
 * {
@@ -108,11 +189,24 @@ select {
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  /*
+   * Hand vertical scrolling to the browser and horizontal drags to the app.
+   * Without this a phone claims the horizontal gesture and fires pointercancel
+   * before the swipe reaches its threshold, so page swiping worked with a mouse
+   * but not on touch. Safe here because the sheets are portaled outside this
+   * element, so the amount slider and colour picker keep their own touch
+   * handling.
+   */
+  touch-action: pan-y;
 }
 
 @media (min-width: 520px) {
   body {
     background: linear-gradient(160deg, #DCE4F7 0%, #EDF1F9 45%, #CBD7F0 100%);
+  }
+
+  [data-theme='dark'] body {
+    background: linear-gradient(160deg, #0A0D18 0%, #0E1120 45%, #141830 100%);
   }
 
   .app-shell {
@@ -254,7 +348,7 @@ select {
 
 .btn-ghost {
   background: var(--blue-50);
-  color: var(--blue-700);
+  color: var(--accent-text);
   border: 1px solid var(--blue-200);
 }
 
@@ -274,7 +368,7 @@ select {
   display: grid;
   place-items: center;
   background: var(--blue-50);
-  color: var(--blue-700);
+  color: var(--accent-text);
   font-size: 17px;
   flex: none;
   transition: transform 0.12s ease, background 0.15s ease;
@@ -311,7 +405,7 @@ select {
 
 .input:focus {
   border-color: var(--blue-400);
-  background: #fff;
+  background: var(--surface);
 }
 
 textarea.input {

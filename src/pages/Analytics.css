@@ -1,4 +1,4 @@
-﻿.analytics-page {
+.analytics-page {
   padding-top: 10px;
 }
 
@@ -37,7 +37,11 @@
   font-weight: 800;
   letter-spacing: 0.09em;
   text-transform: uppercase;
-  color: var(--blue-500);
+  /* --blue-500 sits at 4.37:1 on white and 3.90:1 on the dark card, under the
+   * 4.5:1 this small bold text needs. The accent-text role is darkened for
+   * light surfaces and lightened for dark ones, so it clears the bar either
+   * way instead of only one. */
+  color: var(--accent-text);
 }
 
 .analytics-month-total {
@@ -56,7 +60,7 @@
   border-radius: var(--radius-sm);
   background: var(--blue-50);
   border: 1px solid var(--blue-200);
-  color: var(--blue-700);
+  color: var(--accent-text);
   font-size: 13px;
   font-weight: 700;
 }
@@ -115,7 +119,7 @@
 }
 
 .day-head span:last-child {
-  color: var(--blue-600);
+  color: var(--accent-text);
   font-variant-numeric: tabular-nums;
 }
 

@@ -1,4 +1,4 @@
-﻿.mood-preview {
+.mood-preview {
   display: flex;
   align-items: center;
   gap: 14px;
@@ -24,7 +24,7 @@
 
 .mood-preview strong {
   font-size: 13.5px;
-  color: var(--blue-800);
+  color: var(--accent-text);
 }
 
 .mood-preview small {
@@ -60,7 +60,7 @@
   width: 44px;
   height: 44px;
   border-radius: var(--radius-sm);
-  background: #fff;
+  background: var(--raised);
   border: 1.5px solid var(--border);
   font-size: 24px;
   flex: none;

@@ -1,4 +1,4 @@
-﻿.home-page {
+.home-page {
   padding-top: 12px;
 }
 
@@ -84,8 +84,10 @@
   width: 54px;
   height: 54px;
   border-radius: 16px;
-  color: var(--tile-color);
-  background: color-mix(in srgb, var(--tile-color) 26%, #fff);
+  /* Resolved here, not on :root, so --tile-color is actually in scope. */
+  --ink: color-mix(in srgb, var(--tile-color) var(--tile-ink-weight), #fff);
+  color: var(--ink);
+  background: color-mix(in srgb, var(--ink) var(--tile-tint), var(--tile-box-base));
   transition: transform 0.12s ease;
 }
 

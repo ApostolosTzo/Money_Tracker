@@ -1,5 +1,5 @@
 import { useMemo, useRef, useState } from 'react';
-import type { AppData, Category, PageId } from '../types';
+import type { AppData, Category, PageId, ThemeChoice } from '../types';
 import { useStore } from '../store/store';
 import { grandTotal } from '../lib/selectors';
 import { currentMonthKey, formatMoney, monthLabel } from '../lib/utils';
@@ -96,6 +96,16 @@ export function SettingsPage() {
 
       <p className="section-title">Appearance</p>
       <div className="card settings-card">
+        <SelectRow
+          label="Theme"
+          value={settings.theme}
+          options={[
+            { value: 'dark', label: 'Dark' },
+            { value: 'light', label: 'Light' },
+            { value: 'system', label: 'Match system' },
+          ]}
+          onChange={(v) => dispatch({ type: 'updateSettings', patch: { theme: v as ThemeChoice } })}
+        />
         <Switch
           label="Show bottom tab bar"
           hint="Turn off for full-screen pages. Swiping still moves between them."

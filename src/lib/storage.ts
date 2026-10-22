@@ -1,4 +1,12 @@
-import type { AppData, Category, Entry, MoodRule, PageId, Settings } from '../types';
+import type {
+  AppData,
+  Category,
+  Entry,
+  MoodRule,
+  PageId,
+  Settings,
+  ThemeChoice,
+} from '../types';
 import {
   DEFAULT_CATEGORIES,
   DEFAULT_MOODS,
@@ -13,6 +21,7 @@ export const DATA_VERSION = 1;
 
 export const DEFAULT_SETTINGS: Settings = {
   showTabs: true,
+  theme: 'dark',
   startPage: 'home',
   currency: 'EUR',
   locale: 'en-GB',
@@ -116,12 +125,18 @@ export function migrate(raw: unknown): AppData {
     ? (rawSettings.startPage as PageId)
     : 'home';
 
+  // Anything unrecognised falls back to dark rather than leaving the app unstyled.
+  const theme = ['light', 'dark', 'system'].includes(rawSettings.theme as string)
+    ? (rawSettings.theme as ThemeChoice)
+    : 'dark';
+
   return {
     version: DATA_VERSION,
     entries,
     categories: categoriesWithDefaults,
     settings: {
       showTabs: rawSettings.showTabs !== false,
+      theme,
       startPage,
       currency: String(rawSettings.currency ?? 'EUR'),
       locale: String(rawSettings.locale ?? 'en-GB'),

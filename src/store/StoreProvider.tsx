@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useReducer, useState } from 'react';
 import type { AppData, PageId } from '../types';
 import { currentMonthKey } from '../lib/utils';
 import { loadData, saveData } from '../lib/storage';
+import { useTheme } from '../hooks/useTheme';
 import { expandEntries, stopRepeat, withSkippedMonth } from '../lib/recurring';
 import { OTHER_CATEGORY, MAX_QUICK_TILES } from '../data/defaults';
 import type { Action, AppStore } from './store';
@@ -96,6 +97,9 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     saveData(data);
   }, [data]);
 
+  // Resolves 'system' against the OS and keeps following it while it changes.
+  useTheme(data.settings.theme);
+
   // Don't let the viewed month drift into the future after an import.
   useEffect(() => {
     const now = currentMonthKey();
@@ -110,11 +114,15 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     });
   }, []);
 
-  /** Horizontal swipe: -1 goes back, +1 goes forward, clamped at the ends. */
+  /**
+   * Horizontal swipe: -1 goes back, +1 goes forward, wrapping at the ends so
+   * the three pages form a loop. Clamping left you stuck on Settings with
+   * nowhere to go, which made swiping feel broken rather than bounded.
+   */
   const swipeTo = useCallback((step: 1 | -1) => {
     setPageState((prev) => {
       const i = PAGE_ORDER.indexOf(prev);
-      const next = PAGE_ORDER[Math.min(PAGE_ORDER.length - 1, Math.max(0, i + step))];
+      const next = PAGE_ORDER[(i + step + PAGE_ORDER.length) % PAGE_ORDER.length];
       if (next !== prev) setDirection(step);
       return next;
     });

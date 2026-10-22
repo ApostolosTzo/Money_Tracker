@@ -1,4 +1,4 @@
-﻿import type { Category, MoodRule } from '../types';
+import type { Category, MoodRule } from '../types';
 
 /**
  * Upper bound on quick tiles. The grid is three across, so this is a row

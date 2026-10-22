@@ -51,9 +51,16 @@ const colours = DEFAULT_CATEGORIES.map((c) => c.color.toLowerCase());
 assert.equal(new Set(colours).size, colours.length, 'default colours are distinct');
 
 /*
- * The glyph is drawn in the category colour on a box tinted 26% of the same
- * colour. Deepening both has to keep the glyph legible against its own box,
- * which is the 3:1 floor WCAG sets for a non-text graphic.
+ * The glyph is drawn in the category colour on a box tinted from that same
+ * colour, so both have to stay legible against each other: the 3:1 floor WCAG
+ * sets for a non-text graphic.
+ *
+ * Each theme solves it differently and the test checks both, using the same
+ * numbers the CSS defines. Light tints the box 26% over white and draws the
+ * glyph in the colour itself. Dark cannot reuse that: the same glyph lands on
+ * its own dark box and vanishes. So the ink is lifted 38% toward white first
+ * and the tint drops to 16% over the dark card, which keeps the box present
+ * without swallowing the glyph.
  */
 function lum(hex) {
   const n = parseInt(hex.slice(1), 16);
@@ -64,18 +71,34 @@ function lum(hex) {
   return 0.2126 * ch[0] + 0.7152 * ch[1] + 0.0722 * ch[2];
 }
 
-function tint(hex, pct) {
-  const n = parseInt(hex.slice(1), 16);
-  const mix = (v) => Math.round((1 - pct) * 255 + pct * v);
-  const [r, g, b] = [(n >> 16) & 255, (n >> 8) & 255, n & 255].map(mix);
-  return '#' + [r, g, b].map((v) => v.toString(16).padStart(2, '0')).join('');
+/** `color-mix(in srgb, A <pctA>%, B)` — pctA of A, the rest of B. */
+function mix(a, b, pctA) {
+  const channel = (hex, i) => (parseInt(hex.slice(1), 16) >> (16 - i * 8)) & 255;
+  return (
+    '#' +
+    [0, 1, 2]
+      .map((i) => Math.round(pctA * channel(a, i) + (1 - pctA) * channel(b, i)))
+      .map((v) => v.toString(16).padStart(2, '0'))
+      .join('')
+  );
 }
 
-for (const c of DEFAULT_CATEGORIES) {
-  const box = tint(c.color, 0.26);
-  const [a, b] = [lum(c.color), lum(box)].sort((p, q) => q - p);
-  const ratio = (a + 0.05) / (b + 0.05);
-  assert.ok(ratio >= 3, `${c.id} glyph is legible on its box (${ratio.toFixed(2)}:1)`);
+const THEMES = {
+  light: { ink: (hex) => hex, tint: 0.26, base: '#FFFFFF' },
+  dark: { ink: (hex) => mix(hex, '#FFFFFF', 0.62), tint: 0.16, base: '#171B2E' },
+};
+
+for (const [name, t] of Object.entries(THEMES)) {
+  for (const c of DEFAULT_CATEGORIES) {
+    const glyph = t.ink(c.color);
+    const box = mix(glyph, t.base, t.tint);
+    const [a, b] = [lum(glyph), lum(box)].sort((p, q) => q - p);
+    const ratio = (a + 0.05) / (b + 0.05);
+    assert.ok(
+      ratio >= 3,
+      `${c.id} glyph is legible on its box in ${name} (${ratio.toFixed(2)}:1)`,
+    );
+  }
 }
 
 console.log('palette: all assertions passed');

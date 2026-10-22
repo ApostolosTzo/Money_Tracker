@@ -1,4 +1,4 @@
-﻿.cat-preview {
+.cat-preview {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -45,7 +45,7 @@
   border: 1.5px solid var(--border);
   font-weight: 700;
   font-size: 14px;
-  color: var(--blue-700);
+  color: var(--accent-text);
 }
 
 .emoji-grid {
@@ -133,7 +133,7 @@
   padding: 6px 8px 6px 12px;
   border-radius: 999px;
   border: 1.5px solid;
-  background: #fff;
+  background: var(--raised);
   font-size: 13.5px;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
